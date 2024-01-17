@@ -4,6 +4,7 @@ import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class UserRegistrationService {
             User user = userRepository.save(userMapper.transformUserRegistrationDtoInUserEntity(userData));
             user = userRepository.findByUsername(user.getUsername());
             return userMapper.transformUserEntityInUserDto(user, true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("user or email already exists");
         }
     }
 

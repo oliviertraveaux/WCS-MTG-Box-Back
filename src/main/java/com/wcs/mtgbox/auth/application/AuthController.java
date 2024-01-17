@@ -7,6 +7,7 @@ import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
 import com.wcs.mtgbox.auth.domain.service.UserDetailsServiceImpl;
 import com.wcs.mtgbox.auth.domain.service.UserLoginService;
 import com.wcs.mtgbox.auth.domain.service.UserRegistrationService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,23 +33,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
+    public ResponseEntity<?> login(@RequestBody User userBody)  {
         try {
             userLoginService.login(userBody);
             String token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
 
             return ResponseEntity.ok(token);
         } catch (BadCredentialsException e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(401).body(e.getMessage());
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody UserRegistrationDTO userBody) throws Exception {
+    public ResponseEntity<?> register(@RequestBody UserRegistrationDTO userBody) throws Exception {
         try {
             return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(400).build();
+        }
+        catch ( DataIntegrityViolationException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
