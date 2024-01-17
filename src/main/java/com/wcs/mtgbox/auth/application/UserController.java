@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 // Pour test route "/users/{id}" à delete plus tard
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private UserRegistrationService userRegistrationService;
 

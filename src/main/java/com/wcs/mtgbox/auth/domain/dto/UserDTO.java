@@ -27,6 +27,23 @@ public class UserDTO {
 
     private Role role;
 
+    public UserDTO() {
+    }
+
+    public UserDTO(Long id, String username, String email, Boolean isActive, Boolean isBanned, int postCode, String city, LocalDateTime lastConnectionDate, LocalDateTime creationDate, Role role) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = "";
+        this.isActive = isActive;
+        this.isBanned = isBanned;
+        this.postCode = postCode;
+        this.city = city;
+        this.lastConnectionDate = lastConnectionDate;
+        this.creationDate = creationDate;
+        this.role = role;
+    }
+
     public Long getId() {
         return id;
     }
