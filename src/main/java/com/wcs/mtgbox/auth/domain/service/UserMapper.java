@@ -44,6 +44,9 @@ public class UserMapper {
 
     // Pour test route "/users/{id}" à delete plus tard
     public UserDTO transformUserEntityInUserDtoTest(Optional<User> user, Boolean isForResponse) {
+        if (user.isEmpty()) {
+            throw new RuntimeException();
+        }
         UserDTO userDTO = new UserDTO();
         user.ifPresent(userToReturn -> {
            userDTO.setId(userToReturn.getId());
@@ -58,7 +61,6 @@ public class UserMapper {
            userDTO.setRole(userToReturn.getRole());
            userDTO.setPassword(isForResponse ? "" : userToReturn.getPassword());
         });
-
         return userDTO;
         }
 }

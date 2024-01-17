@@ -2,6 +2,7 @@ package com.wcs.mtgbox.auth.domain.service;
 
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class UserLoginService {
     public User login(User user) {
         User userEntity = getUserEntityByUsername(user.getUsername());
         if (!verifyHashedPasswordDuringLogin(user.getPassword(), userEntity.getPassword())){
-            throw new RuntimeException();
+            throw new BadCredentialsException("Wrong username or password");
         }
         user.setRole(userEntity.getRole());
 
