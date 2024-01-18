@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "`user`")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
@@ -27,10 +27,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "TINYINT(1) default 1")
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @Column(name = "is_banned", nullable = false, columnDefinition = "TINYINT(1) default 0")
+    @Column(name = "is_banned", nullable = false)
     private Boolean isBanned = false;
 
     @Column(name = "post_code", nullable = false)
