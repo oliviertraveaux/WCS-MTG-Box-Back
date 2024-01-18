@@ -11,6 +11,14 @@ public class UserRegistrationDTO {
 
     private String city;
 
+    public UserRegistrationDTO(String username, String email, String password, int postCode, String city) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.postCode = postCode;
+        this.city = city;
+    }
+
     public String getUsername() {
         return username;
     }
