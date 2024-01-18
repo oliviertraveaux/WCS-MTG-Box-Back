@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class UserControllerTest {
 
     @Value( "${test.user.username}" )
@@ -47,7 +49,7 @@ public class UserControllerTest {
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
-                                .get("/api/v1/users/2")
+                                .get("/api/v1/users/1")
                                 .header("Authorization", "Bearer " + loginHelper(USER_USERNAME, USER_PASSWORD))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
