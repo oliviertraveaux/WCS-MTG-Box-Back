@@ -32,7 +32,7 @@ public class AuthController {
         this.userRegistrationService = userRegistrationService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/v1/login")
     public ResponseEntity<?> login(@RequestBody User userBody)  {
         try {
             userLoginService.login(userBody);
@@ -44,7 +44,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/v1/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationDTO userBody) throws Exception {
         try {
             return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));

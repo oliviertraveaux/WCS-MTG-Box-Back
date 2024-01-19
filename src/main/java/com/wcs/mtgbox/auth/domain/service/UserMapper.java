@@ -37,6 +37,8 @@ public class UserMapper {
         user.setPostCode(userDTO.getPostCode());
         user.setCity(userDTO.getCity());
         user.setRole(new Role(1L, "USER"));
+        user.setActive(true);
+        user.setBanned(false);
         user.setPassword(userDTO.getPassword());
 
         return user;

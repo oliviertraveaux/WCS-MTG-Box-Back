@@ -29,11 +29,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                    .requestMatchers("/login", "/register" ).permitAll()
-                    .requestMatchers("/users/**").authenticated()
+                    .requestMatchers("/api/v1/login", "/api/v1/register").permitAll()
+                    .requestMatchers(
+                            "/api/v1/users/**",
+                            "/api/v1/apicards",
+                            "/api/v1/apicards/**"
+                    ).authenticated()
                 )
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
-                        .ignoringRequestMatchers("/register", "/login", "/users/**")
+                        .ignoringRequestMatchers("/api/v1/register", "/api/v1/login", "/api/v1/users/**","/api/v1/apicards")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
                 .sessionManagement(session -> session
