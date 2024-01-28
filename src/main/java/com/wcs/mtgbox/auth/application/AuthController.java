@@ -49,11 +49,12 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserRegistrationDTO userBody) throws Exception {
         try {
             return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch ( DataIntegrityViolationException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
-
-    }
+        catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());}}
 
     @GetMapping("/api/v1/check-availability")
     public ResponseEntity<?> checkAvailability(@RequestParam String username, @RequestParam String email) {
