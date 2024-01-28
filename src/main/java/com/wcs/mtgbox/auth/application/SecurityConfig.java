@@ -33,7 +33,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/v1/users/**").authenticated()
                 )
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
-                        .ignoringRequestMatchers("/api/v1/register", "/api/v1/login", "/api/v1/users/**")
+                        .ignoringRequestMatchers("/api/v1/register", "/api/v1/login", "/api/v1/users/**","/api/v1/apicards")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
                 .sessionManagement(session -> session
