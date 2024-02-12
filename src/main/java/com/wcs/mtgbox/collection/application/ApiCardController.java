@@ -22,4 +22,9 @@ public class ApiCardController {
         return searchApiCardForCollectionService.getApiCardsAndFormat(allParams);
     }
 
+    @GetMapping("/types")
+    List<?> readAllApiCardTypes() throws Exception{
+        return searchApiCardForCollectionService.getAllApiCardTypes();
+    }
+
 }
