@@ -57,4 +57,22 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/api/v1/check-availability")
+    public ResponseEntity<?> checkAvailability(@RequestParam String username, @RequestParam String email) {
+        boolean usernameExists = userRegistrationService.usernameExists(username);
+        boolean emailExists = userRegistrationService.emailExists(email);
+        JSONObject message = new JSONObject();
+
+        if (usernameExists) {
+            message.put("success", "Username already exists");
+
+        } else if (emailExists) {
+            message.put("success", "Email already exists");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(message.toString());
+
+    }
 }
+
+
