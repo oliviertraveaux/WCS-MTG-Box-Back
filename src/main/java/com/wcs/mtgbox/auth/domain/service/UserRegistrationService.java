@@ -49,12 +49,19 @@ public class UserRegistrationService {
             throw new RuntimeException(e);
         }
     }
-    public boolean usernameExists(String username) {
+
+
+    public boolean isUsernameUsed(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    public boolean emailExists(String email) {
+    public boolean isEmailUsed(String email) {
         return userRepository.existsByEmail(email);
     }
 
+    public boolean isUsernameAndEmailAvailable(String username, String email) {
+        boolean isUsernameUsed = this.isUsernameUsed(username);
+        boolean isEmailUsed = this.isEmailUsed(email);
+        return !isUsernameUsed && !isEmailUsed;
+    }
 }

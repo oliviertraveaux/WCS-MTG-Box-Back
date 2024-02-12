@@ -13,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
+
 
 @RestController
 public class AuthController {
@@ -60,18 +59,9 @@ public class AuthController {
         }
     }
     @GetMapping("/api/v1/check-availability")
-    public ResponseEntity<?> checkAvailability(@RequestParam String username, @RequestParam String email) {
-        boolean usernameExists = userRegistrationService.usernameExists(username);
-        boolean emailExists = userRegistrationService.emailExists(email);
-        Map<String, String> response = new HashMap<>();
-
-        if (usernameExists) {
-            response.put("message", "Username already exists");
-        } else if (emailExists) {
-            response.put("message", "Email already exists");
-        }
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Boolean> checkAvailability(@RequestParam String username, @RequestParam String email) {
+        boolean isAvailable = userRegistrationService.isUsernameAndEmailAvailable(username, email);
+        return ResponseEntity.ok(isAvailable);
     }
 }
 
