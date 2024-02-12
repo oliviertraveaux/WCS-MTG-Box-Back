@@ -7,6 +7,7 @@ import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
 import com.wcs.mtgbox.auth.domain.service.UserDetailsServiceImpl;
 import com.wcs.mtgbox.auth.domain.service.UserLoginService;
 import com.wcs.mtgbox.auth.domain.service.UserRegistrationService;
+import org.json.JSONObject;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
