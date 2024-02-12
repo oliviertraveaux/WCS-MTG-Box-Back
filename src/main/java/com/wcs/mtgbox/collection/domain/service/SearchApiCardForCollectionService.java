@@ -30,4 +30,8 @@ public class SearchApiCardForCollectionService {
        });
        return cards;
     }
+
+    public List<String> getAllApiCardTypes(){
+        return getApiCardService.getCardsTypeFromApi();
+    }
 }
