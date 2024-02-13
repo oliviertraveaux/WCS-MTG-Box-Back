@@ -11,6 +11,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class AuthController {
     private final UserLoginService userLoginService;
@@ -53,6 +56,14 @@ public class AuthController {
         catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/api/v1/check-availability")
+    public ResponseEntity<Map<String, Boolean>> checkAvailability(@RequestParam String username, @RequestParam String email) {
+        boolean isAvailable = userRegistrationService.isUsernameAndEmailAvailable(username, email);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isAvailable", isAvailable);
+        return ResponseEntity.ok(response);
     }
 
 }

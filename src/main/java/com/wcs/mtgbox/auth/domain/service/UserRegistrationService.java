@@ -10,4 +10,6 @@ public interface UserRegistrationService {
     String GenerateHashedPassword(String password);
 
     UserDTO GetUser(Long userId);
+
+    boolean isUsernameAndEmailAvailable(String username, String email);
 }
