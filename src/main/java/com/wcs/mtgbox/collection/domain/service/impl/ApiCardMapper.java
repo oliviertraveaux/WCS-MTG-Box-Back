@@ -1,4 +1,4 @@
-package com.wcs.mtgbox.collection.domain.service;
+package com.wcs.mtgbox.collection.domain.service.impl;
 
 import com.wcs.mtgbox.collection.domain.dto.ApiCardDTO;
 import io.magicthegathering.javasdk.resource.Card;
