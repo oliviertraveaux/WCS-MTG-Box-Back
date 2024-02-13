@@ -1,4 +1,4 @@
-package com.wcs.mtgbox.auth.domain.service;
+package com.wcs.mtgbox.auth.domain.service.impl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,14 +16,14 @@ import java.io.IOException;
 
 @Service
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtTokenService jwtTokenService;
+    private final JwtTokenServiceImpl jwtTokenServiceImpl;
     private final UserDetailsServiceImpl userDetailsService;
 
     public JwtAuthenticationFilter(
-            JwtTokenService jwtTokenService,
+            JwtTokenServiceImpl jwtTokenServiceImpl,
             UserDetailsServiceImpl userDetailsService
     ) {
-        this.jwtTokenService = jwtTokenService;
+        this.jwtTokenServiceImpl = jwtTokenServiceImpl;
         this.userDetailsService = userDetailsService;
     }
 
@@ -43,12 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         token = authHeader.substring(7);
-        username = jwtTokenService.getUsernameFromToken(token);
+        username = jwtTokenServiceImpl.getUsernameFromToken(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (jwtTokenService.isTokenValid(token, userDetails)) {
+            if (jwtTokenServiceImpl.isTokenValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
