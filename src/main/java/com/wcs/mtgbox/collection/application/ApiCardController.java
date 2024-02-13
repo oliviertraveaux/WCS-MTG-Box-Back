@@ -9,7 +9,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/apicards")
 public class ApiCardController {
-    private SearchApiCardForCollectionService searchApiCardForCollectionService;
+    private final SearchApiCardForCollectionService searchApiCardForCollectionService;
 
     public ApiCardController(
             SearchApiCardForCollectionService searchApiCardForCollectionService
