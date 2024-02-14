@@ -52,4 +52,18 @@ public class UserRegistrationServiceImpl implements com.wcs.mtgbox.auth.domain.s
             throw new RuntimeException(e);
         }
     }
+
+    private boolean isUsernameUsed(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    private boolean isEmailUsed(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean isUsernameAndEmailAvailable(String username, String email) {
+        boolean isUsernameUsed = this.isUsernameUsed(username);
+        boolean isEmailUsed = this.isEmailUsed(email);
+        return !isUsernameUsed && !isEmailUsed;
+    }
 }
