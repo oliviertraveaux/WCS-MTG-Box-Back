@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ApiCardMapper {
-    public ApiCardDTO transformApiCardRawInApiCardDto(Card apiCardRaw) {
+    public ApiCardDTO fromApiCardRawToApiCardDto(Card apiCardRaw) {
         ApiCardDTO apiCardDTO = new ApiCardDTO();
         apiCardDTO.setCardIdApi(apiCardRaw.getId());
         apiCardDTO.setName(apiCardRaw.getName());
