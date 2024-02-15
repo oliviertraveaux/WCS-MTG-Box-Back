@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.domain.service.impl;
 
+import com.wcs.mtgbox.auth.domain.entity.Token;
 import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,25 +17,29 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
+
 public class JwtTokenServiceImpl implements JwtTokenService {
+
 
     @Value( "${jwt.secretKey}" )
     private  String JWT_SECRET_KEY;
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 ;
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public Token generateToken(UserDetails userDetails) {
         Date now = new Date();
-
-        return Jwts.
+        Token token = new Token();
+        token.setToken(Jwts.
                 builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(now.getTime() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact()
-                ;
+        );
+        return token;
     }
+
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET_KEY);
@@ -76,4 +82,16 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    @Override
+    public ResponseCookie createJwtCookie(String tokenValue) {
+        return ResponseCookie.from("token", tokenValue)
+                .httpOnly(true)
+                //.secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
+                .path("/")        // Le cookie est accessible pour l'ensemble du domaine
+                .maxAge(24 * 60 * 60)
+                .sameSite("Strict")
+                .build();
+    }
 }
+
+

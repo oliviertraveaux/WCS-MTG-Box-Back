@@ -1,12 +1,13 @@
 package com.wcs.mtgbox.auth.application;
 
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
+import com.wcs.mtgbox.auth.domain.entity.Token;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
 import com.wcs.mtgbox.auth.domain.service.UserLoginService;
 import com.wcs.mtgbox.auth.domain.service.UserRegistrationService;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -33,15 +34,18 @@ public class AuthController {
         this.userRegistrationService = userRegistrationService;
     }
 
-    @PostMapping("/api/v1/login")
-    public ResponseEntity<?> login(@RequestBody User userBody)  {
+     @PostMapping(value = "api/v1/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
         try {
             userLoginService.login(userBody);
-            String token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
+            Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
+            ResponseCookie jwtCookie = jwtTokenService.createJwtCookie(token.getToken());
 
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .build();
         } catch (BadCredentialsException e){
-            return ResponseEntity.status(401).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
