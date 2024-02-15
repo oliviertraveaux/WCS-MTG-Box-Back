@@ -1,11 +1,13 @@
 package com.wcs.mtgbox.auth.application;
 
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
+import com.wcs.mtgbox.auth.domain.entity.Token;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
 import com.wcs.mtgbox.auth.domain.service.auth.UserLoginService;
 import com.wcs.mtgbox.auth.domain.service.auth.UserRegistrationService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +33,26 @@ public class AuthController {
         this.userRegistrationService = userRegistrationService;
     }
 
-    @PostMapping("/api/v1/login")
-    public ResponseEntity<?> login(@RequestBody User userBody)  {
+    @PostMapping(value = "api/v1/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
+        try {
             userLoginService.login(userBody);
-            String token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
-            return ResponseEntity.ok(token);
+            Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
+
+            ResponseCookie jwtCookie = ResponseCookie.from("token", token.getToken())
+                    .httpOnly(true)   // Marquer le cookie comme HttpOnly pour la sécurité
+                    //.secure(true)     // Marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
+                    .path("/")        // Le cookie est accessible pour l'ensemble du domaine
+                    .maxAge(24 * 60 * 60) // Définir la durée de vie du cookie (exemple : 24 heures)
+                    .sameSite("Strict") // Politique SameSite pour le cookie
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .build();
+        } catch (BadCredentialsException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @PostMapping("/api/v1/register")

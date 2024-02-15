@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.domain.service.auth;
 
+import com.wcs.mtgbox.auth.domain.entity.Token;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 public interface JwtTokenService {
-    String generateToken(UserDetails userDetails);
+    Token generateToken(UserDetails userDetails);
 
     String getUsernameFromToken(String token);
 
