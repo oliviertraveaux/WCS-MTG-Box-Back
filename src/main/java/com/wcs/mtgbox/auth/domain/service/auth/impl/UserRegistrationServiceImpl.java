@@ -1,16 +1,19 @@
-package com.wcs.mtgbox.auth.domain.service.impl;
+package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
 import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.User;
+import com.wcs.mtgbox.auth.domain.service.auth.UserRegistrationService;
+import com.wcs.mtgbox.auth.infrastructure.exception.registration.RegistrationErrorException;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
-public class UserRegistrationServiceImpl implements com.wcs.mtgbox.auth.domain.service.UserRegistrationService {
+public class UserRegistrationServiceImpl implements UserRegistrationService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bcryptPasswordEncoder;
     private final UserMapper userMapper;
@@ -31,10 +34,11 @@ public class UserRegistrationServiceImpl implements com.wcs.mtgbox.auth.domain.s
         try {
             User user = userRepository.save(userMapper.transformUserRegistrationDtoInUserEntity(userData));
             user = userRepository.findByUsername(user.getUsername());
-            return userMapper.transformUserEntityInUserDto(user, true);
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("user or email already exists");
+            return userMapper.transformUserEntityInUserDto(Optional.ofNullable(user));
+        } catch (Exception e) {
+            throw new RegistrationErrorException("user or email already exists");
         }
+
     }
 
     @Override
@@ -42,16 +46,6 @@ public class UserRegistrationServiceImpl implements com.wcs.mtgbox.auth.domain.s
         return bcryptPasswordEncoder.encode(password);
     }
 
-
-    // Pour test route "/users/{id}" à delete plus tard
-    @Override
-    public UserDTO GetUser(Long userId) {
-        try {
-            return userMapper.transformUserEntityInUserDtoTest(userRepository.findById(userId), true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private boolean isUsernameUsed(String username) {
         return userRepository.existsByUsername(username);

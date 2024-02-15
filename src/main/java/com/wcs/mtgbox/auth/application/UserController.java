@@ -1,27 +1,27 @@
 package com.wcs.mtgbox.auth.application;
 
-import com.wcs.mtgbox.auth.domain.service.UserRegistrationService;
+import com.wcs.mtgbox.auth.domain.service.userInfo.UserInfoService;
+import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// Pour test route "/users/{id}" à delete plus tard
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    private final UserRegistrationService userRegistrationService;
+    private final UserInfoService userInfoService;
 
     public UserController(
-            UserRegistrationService userRegistrationService
+            UserInfoService userInfoService
     ) {
-        this.userRegistrationService = userRegistrationService;
+        this.userInfoService = userInfoService;
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<?> readOne(@PathVariable Long id) throws Exception{
+    ResponseEntity<?> readOne(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userRegistrationService.GetUser(id));
+            return ResponseEntity.ok(userInfoService.GetUser(id));
         } catch (Exception e){
-            return ResponseEntity.status(404).build();
+            throw new UserNotFoundErrorException(id);
         }
     }
 }

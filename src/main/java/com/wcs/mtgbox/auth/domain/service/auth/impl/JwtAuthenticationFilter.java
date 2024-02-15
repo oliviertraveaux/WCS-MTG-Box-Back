@@ -1,4 +1,4 @@
-package com.wcs.mtgbox.auth.domain.service.impl;
+package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

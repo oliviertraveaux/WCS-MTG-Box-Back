@@ -1,6 +1,6 @@
-package com.wcs.mtgbox.auth.domain.service.impl;
+package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
-import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
+import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
