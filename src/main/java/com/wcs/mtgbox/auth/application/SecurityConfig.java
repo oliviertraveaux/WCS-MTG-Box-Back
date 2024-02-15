@@ -1,6 +1,6 @@
 package com.wcs.mtgbox.auth.application;
 
-import com.wcs.mtgbox.auth.domain.service.impl.JwtAuthenticationFilter;
+import com.wcs.mtgbox.auth.domain.service.auth.impl.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

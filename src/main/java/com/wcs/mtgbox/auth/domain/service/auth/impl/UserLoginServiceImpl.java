@@ -1,9 +1,9 @@
-package com.wcs.mtgbox.auth.domain.service.impl;
+package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
 import com.wcs.mtgbox.auth.domain.entity.User;
-import com.wcs.mtgbox.auth.domain.service.UserLoginService;
+import com.wcs.mtgbox.auth.domain.service.auth.UserLoginService;
+import com.wcs.mtgbox.auth.infrastructure.exception.login.LoginErrorException;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,9 @@ public class UserLoginServiceImpl implements UserLoginService {
     public User login(User user) {
         User userEntity = getUserEntityByUsername(user.getUsername());
         if (!verifyHashedPasswordDuringLogin(user.getPassword(), userEntity.getPassword())){
-            throw new BadCredentialsException("Wrong username or password");
+            throw new LoginErrorException("Wrong username or password");
         }
         user.setRole(userEntity.getRole());
-
         return user;
     }
 

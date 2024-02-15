@@ -2,12 +2,10 @@ package com.wcs.mtgbox.auth.application;
 
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.User;
-import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
-import com.wcs.mtgbox.auth.domain.service.UserLoginService;
-import com.wcs.mtgbox.auth.domain.service.UserRegistrationService;
-import org.springframework.dao.DataIntegrityViolationException;
+import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
+import com.wcs.mtgbox.auth.domain.service.auth.UserLoginService;
+import com.wcs.mtgbox.auth.domain.service.auth.UserRegistrationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,27 +33,14 @@ public class AuthController {
 
     @PostMapping("/api/v1/login")
     public ResponseEntity<?> login(@RequestBody User userBody)  {
-        try {
             userLoginService.login(userBody);
             String token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
-
             return ResponseEntity.ok(token);
-        } catch (BadCredentialsException e){
-            return ResponseEntity.status(401).body(e.getMessage());
-        }
     }
 
     @PostMapping("/api/v1/register")
-    public ResponseEntity<?> register(@RequestBody UserRegistrationDTO userBody) throws Exception {
-        try {
-            return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));
-        }
-        catch ( DataIntegrityViolationException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
+    public ResponseEntity<?> register(@RequestBody UserRegistrationDTO userBody)  {
+            return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));//
     }
 
     @GetMapping("/api/v1/check-availability")

@@ -1,4 +1,4 @@
-package com.wcs.mtgbox.auth.domain.service.impl;
+package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
 import com.wcs.mtgbox.auth.domain.dto.UserPrincipal;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
