@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.domain.service.impl;
 
+import com.wcs.mtgbox.auth.domain.entity.Token;
 import com.wcs.mtgbox.auth.domain.service.JwtTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,25 +16,29 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
+
 public class JwtTokenServiceImpl implements JwtTokenService {
+
 
     @Value( "${jwt.secretKey}" )
     private  String JWT_SECRET_KEY;
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 ;
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public Token generateToken(UserDetails userDetails) {
         Date now = new Date();
-
-        return Jwts.
+        Token token = new Token();
+        token.setToken(Jwts.
                 builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(now.getTime() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact()
-                ;
+        );
+        return token;
     }
+
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET_KEY);
