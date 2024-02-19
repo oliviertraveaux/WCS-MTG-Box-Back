@@ -1,9 +1,10 @@
-package com.wcs.mtgbox.auth.domain.service.impl;
+package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
 import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.Role;
 import com.wcs.mtgbox.auth.domain.entity.User;
+import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,24 +12,6 @@ import java.util.Optional;
 
 @Service
 public class UserMapper {
-
-    public UserDTO transformUserEntityInUserDto(User user, Boolean isForResponse) {
-
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setActive(user.getActive());
-            userDTO.setBanned(user.getBanned());
-            userDTO.setPostCode(user.getPostCode());
-            userDTO.setCity(user.getCity());
-            userDTO.setLastConnectionDate(user.getLastConnectionDate());
-            userDTO.setCreationDate(user.getCreationDate());
-            userDTO.setRole(user.getRole());
-            userDTO.setPassword(isForResponse ? "" : user.getPassword());
-
-            return userDTO;
-    }
 
     public User transformUserRegistrationDtoInUserEntity(UserRegistrationDTO userDTO) {
         User user = new User();
@@ -44,10 +27,9 @@ public class UserMapper {
         return user;
     }
 
-    // Pour test route "/users/{id}" à delete plus tard
-    public UserDTO transformUserEntityInUserDtoTest(Optional<User> user, Boolean isForResponse) {
+    public UserDTO transformUserEntityInUserDto(Optional<User> user) {
         if (user.isEmpty()) {
-            throw new RuntimeException();
+            throw new UserNotFoundErrorException();
         }
         UserDTO userDTO = new UserDTO();
         user.ifPresent(userToReturn -> {
@@ -61,7 +43,6 @@ public class UserMapper {
            userDTO.setLastConnectionDate(userToReturn.getLastConnectionDate());
            userDTO.setCreationDate(userToReturn.getCreationDate());
            userDTO.setRole(userToReturn.getRole());
-           userDTO.setPassword(isForResponse ? "" : userToReturn.getPassword());
         });
         return userDTO;
         }

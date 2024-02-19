@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.domain.entity;
 
+import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -8,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "`user`")
@@ -52,6 +54,9 @@ public class User {
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<UserCard> userCards;
 
     public Long getId() {
         return id;

@@ -7,6 +7,7 @@ import io.magicthegathering.javasdk.resource.Card;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +28,24 @@ public class SearchApiCardForCollectionServiceImpl implements SearchApiCardForCo
     public List<ApiCardDTO> getApiCardsAndFormat(Map<String,String> filtersList){
        List<Card> apiCards = getApiCardService.getCardsFromApi(filtersList);
        List<ApiCardDTO> cards = new ArrayList<ApiCardDTO>();
-       apiCards.forEach((card) -> {
-           if (card.getImageUrl() != null){
-               cards.add(apiCardMapper.transformApiCardRawInApiCardDto(card));
-           }
-       });
+
+       if (filtersList.get("language").equals("french")){
+           apiCards.forEach((card) -> {
+                   Object[] result =  Arrays.stream(card.getForeignNames())
+                           .filter((foreignData) -> (
+                                   foreignData.getLanguage().equals("French") && foreignData.getImageUrl() != null
+                           )).toArray();
+                   if ( result.length > 0 ) {
+                       cards.add(apiCardMapper.fromApiCardRawToApiCardDto(card));
+                   }
+           });
+       } else {
+           apiCards.forEach((card) -> {
+               if (card.getImageUrl() != null){
+                   cards.add(apiCardMapper.fromApiCardRawToApiCardDto(card));
+               }
+           });
+       }
        return cards;
     }
 

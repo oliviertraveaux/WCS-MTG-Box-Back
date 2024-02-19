@@ -1,4 +1,4 @@
-package com.wcs.mtgbox.auth.domain.service;
+package com.wcs.mtgbox.auth.domain.service.auth;
 
 import com.wcs.mtgbox.auth.domain.entity.User;
 
