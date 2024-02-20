@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.auth.domain.entity;
 
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
+import com.wcs.mtgbox.files.domain.entity.Media;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -57,6 +58,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserCard> userCards;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "file_id")
+    private Media media;
 
     public Long getId() {
         return id;
@@ -144,5 +149,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
     }
 }
