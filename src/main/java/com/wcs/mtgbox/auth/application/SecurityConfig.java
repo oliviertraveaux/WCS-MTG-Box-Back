@@ -29,10 +29,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                    .requestMatchers("/api/v1/login", "/api/v1/register", "/api/v1/check-availability*" ).permitAll()
+                    .requestMatchers("/api/v1/login", "/api/v1/register", "/api/v1/check-availability*").permitAll()
                     .requestMatchers(
                             "/api/v1/users/**",
                             "/api/v1/apicards",
+                            "/api/v1/apicards/**",
+                            "/api/v1/collection-cards",
+                            "/api/v1/collection-cards/**",
                             "/api/v1/apicards/**",
                             "/api/v1/upload",
                             "/api/v1/upload/**",
@@ -41,7 +44,17 @@ public class SecurityConfig {
                     ).authenticated()
                 )
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
-                        .ignoringRequestMatchers("/api/v1/register", "/api/v1/login", "/api/v1/users/**","/api/v1/apicards", "/api/v1/apicards/**")
+                        .ignoringRequestMatchers("/api/v1/register",
+                                "/api/v1/login",
+                                "/api/v1/users/**",
+                                "/api/v1/apicards",
+                                "/api/v1/apicards/**",
+                                "/api/v1/collection-cards",
+                                "/api/v1/collection-cards/**",
+                                "/api/v1/upload",
+                                "/api/v1/upload/**",
+                                "/files",
+                                "/uploads")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
                 .sessionManagement(session -> session
