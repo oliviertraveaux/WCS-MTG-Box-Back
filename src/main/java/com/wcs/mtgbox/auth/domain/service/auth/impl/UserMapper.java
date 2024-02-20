@@ -43,6 +43,7 @@ public class UserMapper {
            userDTO.setLastConnectionDate(userToReturn.getLastConnectionDate());
            userDTO.setCreationDate(userToReturn.getCreationDate());
            userDTO.setRole(userToReturn.getRole());
+           userDTO.setAvatar(userToReturn.getMedia());
         });
         return userDTO;
         }

@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.auth.domain.dto;
 
 import com.wcs.mtgbox.auth.domain.entity.Role;
+import com.wcs.mtgbox.files.domain.entity.Media;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,8 @@ public class UserDTO {
     private LocalDateTime creationDate;
 
     private Role role;
+
+    private Media avatar;
 
     public UserDTO() {
     }
@@ -120,5 +123,13 @@ public class UserDTO {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Media getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Media avatar) {
+        this.avatar = avatar;
     }
 }
