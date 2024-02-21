@@ -77,7 +77,7 @@ public class CollectionCardServiceImpl implements CollectionCardService {
     }
 
     private UserCard saveUserCard(Card cardInfo, AddCollectionCardDto addCardDto) {
-        User user = userRepository.findById(addCardDto.getUserInfo().getQualityId())
+        User user = userRepository.findById(addCardDto.getUserInfo().getUserId())
                 .orElseThrow(UserNotFoundErrorException::new);
         CardQuality cardQuality = cardQualityRepository.findById(addCardDto.getUserInfo().getQualityId())
                 .orElseThrow(CardQualityNotFoundErrorException::new);
@@ -86,5 +86,27 @@ public class CollectionCardServiceImpl implements CollectionCardService {
 
         return userCardRepository.save(cardMapper.addCollectionCardDtoToUserCardEntity(user, cardInfo, cardQuality, cardLanguage));
     }
+
+    @Override
+    public List<CollectionCardDto> getCollectionCardsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundErrorException::new);
+        List<UserCard> userCards = userCardRepository.findAllByUserId(userId);
+        if (userCards.isEmpty()) {
+            throw new CardNotFoundErrorException(userId);
+
+        }
+        List<CollectionCardDto> collectionCards = new ArrayList<>();
+
+        for (UserCard userCard : userCards) {
+            Card card = userCard.getCard();
+            CollectionCardDto dto = cardMapper.cardAndUserCardEntityToCollectionCardDtoTo(card, userCard);
+            collectionCards.add(dto);
+        }
+
+        return collectionCards;
+    }
+
+
 
 }
