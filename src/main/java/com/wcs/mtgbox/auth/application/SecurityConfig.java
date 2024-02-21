@@ -20,6 +20,14 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    private static final String[] WHITE_LIST_URL = {
+            "/api/v1/login",
+            "/api/v1/register",
+            "/api/v1/check-availability*",
+            "/api/v1/filters",
+            "/api/v1/filters/**"
+    };
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -29,7 +37,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                    .requestMatchers("/api/v1/login", "/api/v1/register", "/api/v1/check-availability*").permitAll()
+                    .requestMatchers(WHITE_LIST_URL).permitAll()
                     .requestMatchers(
                             "/api/v1/users/**",
                             "/api/v1/apicards",
