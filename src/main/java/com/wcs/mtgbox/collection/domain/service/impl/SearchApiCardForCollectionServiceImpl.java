@@ -29,7 +29,7 @@ public class SearchApiCardForCollectionServiceImpl implements SearchApiCardForCo
        List<Card> apiCards = getApiCardService.getCardsFromApi(filtersList);
        List<ApiCardDTO> cards = new ArrayList<ApiCardDTO>();
 
-       if (filtersList.get("language").equals("french")){
+       if (filtersList.get("language") != null && filtersList.get("language").equals("french")){
            apiCards.forEach((card) -> {
                    Object[] result =  Arrays.stream(card.getForeignNames())
                            .filter((foreignData) -> (

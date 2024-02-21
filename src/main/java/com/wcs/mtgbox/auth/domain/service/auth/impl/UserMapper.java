@@ -20,8 +20,8 @@ public class UserMapper {
         user.setPostCode(userDTO.getPostCode());
         user.setCity(userDTO.getCity());
         user.setRole(new Role(1L, "USER"));
-        user.setActive(true);
-        user.setBanned(false);
+        user.setIsActive(true);
+        user.setIsBanned(false);
         user.setPassword(userDTO.getPassword());
 
         return user;
@@ -36,8 +36,8 @@ public class UserMapper {
            userDTO.setId(userToReturn.getId());
            userDTO.setEmail(userToReturn.getEmail());
            userDTO.setUsername(userToReturn.getUsername());
-           userDTO.setActive(userToReturn.getActive());
-           userDTO.setBanned(userToReturn.getBanned());
+           userDTO.setIsActive(userToReturn.getIsActive());
+           userDTO.setIsBanned(userToReturn.getIsBanned());
            userDTO.setPostCode(userToReturn.getPostCode());
            userDTO.setCity(userToReturn.getCity());
            userDTO.setLastConnectionDate(userToReturn.getLastConnectionDate());
