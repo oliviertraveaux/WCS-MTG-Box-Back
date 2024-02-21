@@ -1,11 +1,16 @@
 package com.wcs.mtgbox.collection.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table
+@Getter @Setter
+@NoArgsConstructor
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +39,7 @@ public class Card {
     private String rarity;
 
     @Column(name = "set_abbreviation")
-    private String set;
+    private String setAbbreviation;
 
     @Column(name = "set_name")
     private String setName;
@@ -48,107 +53,4 @@ public class Card {
     @OneToMany(mappedBy = "card", cascade = CascadeType.REMOVE)
     private List<UserCard> userCards;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getApiCardId() {
-        return apiCardId;
-    }
-
-    public void setApiCardId(String apiCardId) {
-        this.apiCardId = apiCardId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getFrenchName() {
-        return frenchName;
-    }
-
-    public void setFrenchName(String frenchName) {
-        this.frenchName = frenchName;
-    }
-
-    public String getFrenchImageUrl() {
-        return frenchImageUrl;
-    }
-
-    public void setFrenchImageUrl(String frenchImageUrl) {
-        this.frenchImageUrl = frenchImageUrl;
-    }
-
-    public Integer getManaCost() {
-        return manaCost;
-    }
-
-    public void setManaCost(Integer manaCost) {
-        this.manaCost = manaCost;
-    }
-
-    public String getRarity() {
-        return rarity;
-    }
-
-    public void setRarity(String rarity) {
-        this.rarity = rarity;
-    }
-
-    public String getSet() {
-        return set;
-    }
-
-    public void setSet(String set) {
-        this.set = set;
-    }
-
-    public String getSetName() {
-        return setName;
-    }
-
-    public void setSetName(String setName) {
-        this.setName = setName;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public List<UserCard> getUserCards() {
-        return userCards;
-    }
-
-    public void setUserCards(List<UserCard> userCards) {
-        this.userCards = userCards;
-    }
 }

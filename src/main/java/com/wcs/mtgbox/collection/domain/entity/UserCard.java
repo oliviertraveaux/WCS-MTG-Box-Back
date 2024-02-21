@@ -3,8 +3,14 @@ package com.wcs.mtgbox.collection.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,53 +35,6 @@ public class UserCard {
     private CardLanguage cardLanguage;
 
     @Column(name = "is_active")
-    private String isActive;
+    private Boolean isActive;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Card getCard() {
-        return card;
-    }
-
-    public void setCard(Card card) {
-        this.card = card;
-    }
-
-    public CardQuality getCardQuality() {
-        return cardQuality;
-    }
-
-    public void setCardQuality(CardQuality cardQuality) {
-        this.cardQuality = cardQuality;
-    }
-
-    public CardLanguage getCardLanguage() {
-        return cardLanguage;
-    }
-
-    public void setCardLanguage(CardLanguage cardLanguage) {
-        this.cardLanguage = cardLanguage;
-    }
-
-    public String getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
-    }
 }
