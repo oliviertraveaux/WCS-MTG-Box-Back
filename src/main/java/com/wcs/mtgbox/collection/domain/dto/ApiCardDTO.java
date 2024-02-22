@@ -11,7 +11,7 @@ public class ApiCardDTO {
     private String name;
     private ForeignData[] foreignNames;
     private String imageUrl;
-    private String manaCost;
+    private Integer manaCost;
     private String rarity;
     private String set;
     private String setName;
@@ -21,7 +21,7 @@ public class ApiCardDTO {
     public ApiCardDTO(){
     }
 
-    public ApiCardDTO(String cardIdApi, String name, ForeignData[] foreignNames, String imageUrl, String manaCost, String rarity, String set, String setName, String artist, String text) {
+    public ApiCardDTO(String cardIdApi, String name, ForeignData[] foreignNames, String imageUrl, Integer manaCost, String rarity, String set, String setName, String artist, String text) {
         this.cardIdApi = cardIdApi;
         this.name = name;
         this.foreignNames = foreignNames;
