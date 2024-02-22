@@ -20,7 +20,7 @@ public class CollectionCardController {
         this.collectionCardService = collectionCardService;
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<List<CollectionCardDto>> readAllCollectionCardsFromUser(@PathVariable Long id) {
         List<CollectionCardDto> cards = collectionCardService.getCollectionCardsByUserId(id);
         return ResponseEntity.ok(cards);
