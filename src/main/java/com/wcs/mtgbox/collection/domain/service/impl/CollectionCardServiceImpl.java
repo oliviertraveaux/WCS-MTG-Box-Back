@@ -105,14 +105,10 @@ public class CollectionCardServiceImpl implements CollectionCardService {
     }
 
     @Override
-    public void removeUserCardByUserIdAndUserCardId(Long userId, Long userCardId) {
-        Optional<UserCard> userCard = userCardRepository.findById(userCardId);
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundErrorException::new);
-        UserCard usercard = userCardRepository.findById(userCardId)
+    public void removeUserCardId(Long userCardId) {
+        UserCard userCard = userCardRepository.findById(userCardId)
                 .orElseThrow(UserCardNotFoundErrorException::new);
-        userCardRepository.deleteById(userCardId);
+        userCardRepository.delete(userCard);
     }
-
 
 }

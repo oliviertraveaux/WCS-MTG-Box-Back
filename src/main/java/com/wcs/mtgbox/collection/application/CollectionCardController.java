@@ -31,11 +31,9 @@ public class CollectionCardController {
         return ResponseEntity.status(201).body(collectionCardService.saveCollectionCards(addCardsBody));
     }
 
-    @DeleteMapping("/user/{userId}/usercard/{userCardId}")
-    public ResponseEntity<?> removeUserCardByUserIdAndUserCardId(@PathVariable Long userId, @PathVariable Long userCardId) {
-        collectionCardService.removeUserCardByUserIdAndUserCardId(userId, userCardId);
+    @DeleteMapping("/usercard/{userCardId}")
+    public ResponseEntity<?> removeUserCardId(@PathVariable Long userCardId) {
+        collectionCardService.removeUserCardId(userCardId);
         return ResponseEntity.ok().build();
-
-
     }
 }
