@@ -23,11 +23,19 @@ public class CollectionCardController {
     @GetMapping("/{id}")
     public ResponseEntity<List<CollectionCardDto>> readAllCollectionCardsFromUser(@PathVariable Long id) {
         List<CollectionCardDto> cards = collectionCardService.getCollectionCardsByUserId(id);
-        return ResponseEntity.ok(cards);}
+        return ResponseEntity.ok(cards);
+    }
 
     @PostMapping
-    public ResponseEntity<?> addCollectionCards(@RequestBody List<AddCollectionCardDto> addCardsBody)  {
+    public ResponseEntity<?> addCollectionCards(@RequestBody List<AddCollectionCardDto> addCardsBody) {
         return ResponseEntity.status(201).body(collectionCardService.saveCollectionCards(addCardsBody));
     }
 
+    @DeleteMapping("/user/{userId}/usercard/{userCardId}")
+    public ResponseEntity<?> removeUserCardByUserIdAndUserCardId(@PathVariable Long userId, @PathVariable Long userCardId) {
+        collectionCardService.removeUserCardByUserIdAndUserCardId(userId, userCardId);
+        return ResponseEntity.ok().build();
+
+
+    }
 }

@@ -13,6 +13,7 @@ import com.wcs.mtgbox.collection.domain.service.CollectionCardService;
 import com.wcs.mtgbox.collection.infrastructure.exception.CardLanguageNotFoundErrorException;
 import com.wcs.mtgbox.collection.infrastructure.exception.CardNotFoundErrorException;
 import com.wcs.mtgbox.collection.infrastructure.exception.CardQualityNotFoundErrorException;
+import com.wcs.mtgbox.collection.infrastructure.exception.UserCardNotFoundErrorException;
 import com.wcs.mtgbox.collection.infrastructure.repository.CardLanguageRepository;
 import com.wcs.mtgbox.collection.infrastructure.repository.CardQualityRepository;
 import com.wcs.mtgbox.collection.infrastructure.repository.CardRepository;
@@ -101,6 +102,16 @@ public class CollectionCardServiceImpl implements CollectionCardService {
         }
 
         return collectionCards;
+    }
+
+    @Override
+    public void removeUserCardByUserIdAndUserCardId(Long userId, Long userCardId) {
+        Optional<UserCard> userCard = userCardRepository.findById(userCardId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundErrorException::new);
+        UserCard usercard = userCardRepository.findById(userCardId)
+                .orElseThrow(UserCardNotFoundErrorException::new);
+        userCardRepository.deleteById(userCardId);
     }
 
 
