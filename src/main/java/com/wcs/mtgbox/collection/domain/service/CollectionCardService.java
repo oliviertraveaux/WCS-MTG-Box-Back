@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CollectionCardService {
     List<CollectionCardDto> saveCollectionCards(List<AddCollectionCardDto> addCardList);
+    List<CollectionCardDto> getCollectionCardsByUserId(Long userId);
 }

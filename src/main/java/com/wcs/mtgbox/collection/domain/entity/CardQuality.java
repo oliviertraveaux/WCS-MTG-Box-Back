@@ -18,10 +18,10 @@ public class CardQuality {
     @Column(name = "card_quality_id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "abbreviation")
+    @Column(name = "abbreviation", nullable = false, unique = true)
     private String abbreviation;
 
     @OneToMany(mappedBy = "cardQuality", cascade = CascadeType.REMOVE)

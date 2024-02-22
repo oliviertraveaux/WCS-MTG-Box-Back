@@ -21,10 +21,4 @@ public class ApiCardController {
     List<?> readAllApiCards(@RequestParam(required = false) Map<String,String> allParams) throws Exception{
         return searchApiCardForCollectionService.getApiCardsAndFormat(allParams);
     }
-
-    @GetMapping("/types")
-    List<?> readAllApiCardTypes() throws Exception{
-        return searchApiCardForCollectionService.getAllApiCardTypes();
-    }
-
 }
