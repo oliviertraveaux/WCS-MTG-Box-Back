@@ -1,15 +1,13 @@
 package com.wcs.mtgbox.filters.application;
 
-import com.wcs.mtgbox.collection.domain.entity.CardLanguage;
-import com.wcs.mtgbox.collection.domain.entity.CardQuality;
 import com.wcs.mtgbox.filters.domain.entity.CardRarity;
+import com.wcs.mtgbox.filters.domain.entity.CardSet;
+import com.wcs.mtgbox.filters.domain.entity.CardType;
 import com.wcs.mtgbox.filters.domain.service.FilterService;
-import com.wcs.mtgbox.filters.domain.service.dto.AllFilterDTO;
-import com.wcs.mtgbox.filters.domain.service.dto.ApiSetDTO;
-import com.wcs.mtgbox.filters.domain.service.dto.CardLanguageDTO;
-import com.wcs.mtgbox.filters.domain.service.dto.CardQualityDTO;
+import com.wcs.mtgbox.filters.domain.service.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,23 +23,39 @@ public class FilterController {
         this.filterService = filterService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<AllFilterDTO> readAll() {
         AllFilterDTO allFilterDTO = filterService.readAll();
         return ResponseEntity.ok().body(allFilterDTO);
     }
 
     @GetMapping("/sets")
-    public ResponseEntity<List<ApiSetDTO>> readAllApiCardsSets() {
-        List<ApiSetDTO> apiSets = filterService.readAllApiCardSets();
+    public ResponseEntity<List<CardSetDTO>> readAllCardsSets() {
+        List<CardSetDTO> apiSets = filterService.readAllApiCardSets();
         return ResponseEntity.ok().body(apiSets);
     }
 
+    // UNCOMMENT FOR DEVELOPMENT PURPOSE ONLY. REMOVE FOR PRODUCTION
+
+//    @PostMapping("/sets")
+//    public ResponseEntity<List<CardSet>> saveAllApiCardSets() {
+//        List<CardSet> apiSets = filterService.saveAllApiCardSets();
+//        return ResponseEntity.ok().body(apiSets);
+//    }
+
     @GetMapping("/types")
-    public ResponseEntity<List<String>> readAllApiCardsTypes() {
-        List<String> cardTypes = filterService.readAllApiCardTypes();
+    public ResponseEntity<List<CardTypeDTO>> readAllCardTypes() {
+        List<CardTypeDTO> cardTypes = filterService.readAllApiCardTypes();
         return ResponseEntity.ok().body(cardTypes);
     }
+
+    // UNCOMMENT FOR DEVELOPMENT PURPOSE ONLY. REMOVE FOR PRODUCTION
+
+//    @PostMapping("/types")
+//    public ResponseEntity<List<CardType>> saveAllCardTypes() {
+//        List<CardType> cardTypes = filterService.saveAllCardTypes();
+//        return ResponseEntity.ok().body(cardTypes);
+//    }
 
     @GetMapping("/languages")
     public ResponseEntity<List<CardLanguageDTO>> readAllLanguages() {

@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiSetDTO {
+public class CardTypeDTO {
     private String name;
-    private String code;
 }
