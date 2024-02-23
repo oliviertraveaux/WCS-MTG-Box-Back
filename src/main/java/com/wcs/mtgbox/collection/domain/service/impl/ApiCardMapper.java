@@ -12,7 +12,7 @@ public class ApiCardMapper {
         apiCardDTO.setName(apiCardRaw.getName());
         apiCardDTO.setForeignNames(apiCardRaw.getForeignNames());
         apiCardDTO.setImageUrl(apiCardRaw.getImageUrl());
-        apiCardDTO.setManaCost(apiCardRaw.getManaCost());
+        apiCardDTO.setManaCost((int) apiCardRaw.getCmc());
         apiCardDTO.setRarity(apiCardRaw.getRarity());
         apiCardDTO.setSet(apiCardRaw.getSet());
         apiCardDTO.setSetName(apiCardRaw.getSetName());
