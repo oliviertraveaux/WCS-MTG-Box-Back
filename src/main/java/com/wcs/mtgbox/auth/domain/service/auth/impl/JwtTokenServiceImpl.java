@@ -16,12 +16,16 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+import static java.lang.Integer.parseInt;
+
 @Service
 public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Value( "${jwt.secretKey}" )
     private  String JWT_SECRET_KEY;
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+
+    @Value("${jwt.tokenValidityTimeInMinute}")
+    public static long JWT_TOKEN_VALIDITY_IN_MINUTE;
 
     @Override
     public Token generateToken(UserDetails userDetails) {
@@ -31,7 +35,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(now.getTime() + JWT_TOKEN_VALIDITY * 1000))
+                .setExpiration(new Date(now.getTime() + JWT_TOKEN_VALIDITY_IN_MINUTE * 60 * 1000))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact()
         );
@@ -84,7 +88,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .httpOnly(true)
                 //.secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
                 .path("/")        // Le cookie est accessible pour l'ensemble du domaine
-                .maxAge(24 * 60 * 60)
+                .maxAge(JWT_TOKEN_VALIDITY_IN_MINUTE * 60)
                 .sameSite("Strict")
                 .build();
     }
