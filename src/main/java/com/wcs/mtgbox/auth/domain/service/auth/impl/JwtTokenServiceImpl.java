@@ -25,7 +25,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     private  String JWT_SECRET_KEY;
 
     @Value("${jwt.tokenValidityTimeInMinute}")
-    public static long JWT_TOKEN_VALIDITY_IN_MINUTE;
+    public long JWT_TOKEN_VALIDITY_IN_MINUTE;
 
     @Override
     public Token generateToken(UserDetails userDetails) {
