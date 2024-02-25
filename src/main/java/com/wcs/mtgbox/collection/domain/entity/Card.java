@@ -44,7 +44,7 @@ public class Card {
     @Column(name = "set_name")
     private String setName;
 
-    @Column(name = "text")
+    @Column(name = "text", columnDefinition = "longtext")
     private String text;
 
     @Column(name = "artist")
