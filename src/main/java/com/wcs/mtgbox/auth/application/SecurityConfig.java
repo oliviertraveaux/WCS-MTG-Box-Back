@@ -25,7 +25,9 @@ public class SecurityConfig {
             "/api/v1/register",
             "/api/v1/check-availability*",
             "/api/v1/filters",
-            "/api/v1/filters/**"
+            "/api/v1/filters/**",
+            "/api/v1/filters/**",
+            "/api/v1/logout",
     };
 
     @Bean
@@ -47,7 +49,8 @@ public class SecurityConfig {
                             "/api/v1/apicards/**",
                             "/api/v1/upload",
                             "/api/v1/upload/**",
-                            "/files"
+                            "/files",
+                            "api/v1/logout"
 
                     ).authenticated()
                 )
