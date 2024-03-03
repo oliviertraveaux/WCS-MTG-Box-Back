@@ -54,7 +54,7 @@ public class CollectionCardServiceImpl implements CollectionCardService {
 
         List<CollectionCardDto> newCollectionCards = new ArrayList<CollectionCardDto>();
 
-        addCardList.forEach((card) -> {
+        addCardList.forEach(card -> {
             Optional<Card> dbCard = Optional.ofNullable(cardRepository.findCardByApiCardId(card.getCardInfo().getApiCardId()));
             if (dbCard.isEmpty()) {
                 dbCard = this.saveCardInDatabase(card);
@@ -80,9 +80,9 @@ public class CollectionCardServiceImpl implements CollectionCardService {
     private UserCard saveUserCard(Card cardInfo, AddCollectionCardDto addCardDto) {
         User user = userRepository.findById(addCardDto.getUserInfo().getUserId())
                 .orElseThrow(UserNotFoundErrorException::new);
-        CardQuality cardQuality = cardQualityRepository.findById(addCardDto.getUserInfo().getQualityId())
+        CardQuality cardQuality = cardQualityRepository.findByName(addCardDto.getUserInfo().getQualityName())
                 .orElseThrow(CardQualityNotFoundErrorException::new);
-        CardLanguage cardLanguage = cardLanguageRepository.findById(addCardDto.getUserInfo().getLanguageId())
+        CardLanguage cardLanguage = cardLanguageRepository.findByName(addCardDto.getUserInfo().getLanguageName())
                 .orElseThrow(CardLanguageNotFoundErrorException::new);
 
         return userCardRepository.save(cardMapper.addCollectionCardDtoToUserCardEntity(user, cardInfo, cardQuality, cardLanguage));
