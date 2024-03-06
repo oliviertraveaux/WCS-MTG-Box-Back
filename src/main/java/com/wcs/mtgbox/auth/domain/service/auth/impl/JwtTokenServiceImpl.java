@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -87,10 +89,19 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         return ResponseCookie.from("token", tokenValue)
                 .httpOnly(true)
                 //.secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
-                .path("/")        // Le cookie est accessible pour l'ensemble du domaine
+                .path("/")
                 .maxAge(JWT_TOKEN_VALIDITY_IN_MINUTE * 60)
                 .sameSite("Strict")
                 .build();
+    }
+
+    @Override
+    public void deleteCookie(HttpServletResponse response, String cookieName) {
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 
 }

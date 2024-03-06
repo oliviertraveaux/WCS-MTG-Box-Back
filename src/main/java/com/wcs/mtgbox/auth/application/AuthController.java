@@ -6,6 +6,7 @@ import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
 import com.wcs.mtgbox.auth.domain.service.auth.UserLoginService;
 import com.wcs.mtgbox.auth.domain.service.auth.UserRegistrationService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,6 +58,12 @@ public class AuthController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("isAvailable", isAvailable);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/v1/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        jwtTokenService.deleteCookie(response, "token");
+        return ResponseEntity.ok().build();
     }
 
 
