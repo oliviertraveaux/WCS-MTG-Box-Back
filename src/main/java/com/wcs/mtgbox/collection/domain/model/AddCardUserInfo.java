@@ -9,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddCardUserInfo {
     private Long userId;
-    private Long qualityId;
-    private Long languageId;
+    private String qualityName;
+    private String languageName;
 }
