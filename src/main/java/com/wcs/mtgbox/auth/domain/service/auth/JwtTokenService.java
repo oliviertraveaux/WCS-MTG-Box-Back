@@ -2,6 +2,7 @@ package com.wcs.mtgbox.auth.domain.service.auth;
 
 import com.wcs.mtgbox.auth.domain.entity.Token;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,4 +21,6 @@ public interface JwtTokenService {
     boolean isTokenValid(String token, UserDetails userDetails);
 
     ResponseCookie createJwtCookie(String tokenValue);
+
+    void deleteCookie(HttpServletResponse response, String cookieName);
 }
