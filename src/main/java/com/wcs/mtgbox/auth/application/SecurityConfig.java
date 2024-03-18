@@ -50,7 +50,8 @@ public class SecurityConfig {
                             "/api/v1/upload",
                             "/api/v1/upload/**",
                             "/files",
-                            "api/v1/logout"
+                            "api/v1/logout","/api/v1/verify-token"
+
 
                     ).authenticated()
                 )
@@ -65,6 +66,7 @@ public class SecurityConfig {
                                 "/api/v1/upload",
                                 "/api/v1/upload/**",
                                 "/files",
+                                "/api/v1/verify-token",
                                 "/uploads")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
