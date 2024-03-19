@@ -1,21 +1,31 @@
 package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
+import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.entity.Token;
+import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
+import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static java.lang.Integer.parseInt;
@@ -103,5 +113,54 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserMapper userMapper;
+
+
+
+    @Override
+    public ResponseEntity<?> verifyToken(HttpServletRequest request) {
+        String cookieName = "token";
+
+        try {
+            if (request.getCookies() == null) {
+                throw new Exception("No cookies found");
+            }
+
+            String token = Arrays.stream(request.getCookies())
+                    .filter(c -> cookieName.equals(c.getName()))
+                    .findFirst()
+                    .map(Cookie::getValue)
+                    .orElseThrow(() -> new Exception("Token cookie not found"));
+
+            String username = getUsernameFromToken(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            if (!isTokenValid(token, userDetails)) {
+                throw new Exception("Invalid or expired token");
+            }
+
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new Exception("User not found");
+            }
+
+            UserDTO userDTO = userMapper.transformUserEntityInUserDto(Optional.of(user));
+            return ResponseEntity.ok().body(userDTO);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("An error occurred while processing the token");
+        }
+    }
+
+
+}
 
 }
