@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db-mysql-mtgbox:
+    container_name: db-mysql-mtgbox
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: 'qwerty'
+    ports:
+      - ${MYSQL_PORT}
+    volumes:
+      - db-mysql-mtgbox:/var/lib/mysql
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${APP_PORT}
+    environment:
+      - SPRING_DATASOURCE_URL=${APP_SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${APP_SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${APP_SPRING_DATASOURCE_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=${APP_SPRING_JPA_HIBERNATE_DDL_AUTO}
+      - JWT_SECRETKEY= ${JWT_SECRETKEY}
+      - JWT_TOKEN_VALIDITYTIMEINMINUTE= ${JWT_TOKEN_VALIDITYTIMEINMINUTE}
+    depends_on:
+      - db-mysql-mtgbox
+    volumes:
+      - ..:/app
+      - ~/.m2:/root/.m2
+
+volumes:
+  db-mysql-mtgbox:

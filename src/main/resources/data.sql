@@ -10,7 +10,7 @@ INSERT INTO card_rarity (name) VALUES
                                    ('Common'),
                                    ('Uncommon'),
                                    ('Rare'),
-                                   ('Mythic Rare'),
+                                   ('Mythic'),
                                    ('Basic Land'),
                                    ('Special');
 INSERT INTO card_language (name) VALUES
