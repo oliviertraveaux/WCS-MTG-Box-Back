@@ -111,4 +111,14 @@ public class CollectionCardServiceImpl implements CollectionCardService {
         userCardRepository.delete(userCard);
     }
 
+    @Override
+    public void removeUserCardsByUserCardIds(List<Long> userCardIdList) {
+        List<UserCard> userCards = userCardRepository.findAllById(userCardIdList);
+        if (userCards.isEmpty()) {
+            throw new UserCardNotFoundErrorException();
+        }
+        else {
+            userCardRepository.deleteAll(userCards);
+        }
+    }
 }

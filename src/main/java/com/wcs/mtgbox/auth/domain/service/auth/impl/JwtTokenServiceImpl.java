@@ -123,8 +123,6 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     @Autowired
     private UserMapper userMapper;
 
-
-
     @Override
     public ResponseEntity<?> verifyToken(HttpServletRequest request) {
         String cookieName = "token";
@@ -159,8 +157,4 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("An error occurred while processing the token");
         }
     }
-
-
-}
-
 }
