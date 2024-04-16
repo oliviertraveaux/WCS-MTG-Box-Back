@@ -36,4 +36,10 @@ public class CollectionCardController {
         collectionCardService.removeUserCardId(userCardId);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/usercards")
+    public ResponseEntity<?> removeUserCardsById(@RequestBody List<Long> cardsIdList) {
+        collectionCardService.removeUserCardsByUserCardIds(cardsIdList);
+        return ResponseEntity.ok().build();
+    }
 }
