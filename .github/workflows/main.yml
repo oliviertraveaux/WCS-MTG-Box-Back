@@ -13,6 +13,10 @@ jobs:
       SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
       SPRING_DATASOURCE_USERNAME: 'sa'
       SPRING_DATASOURCE_PASSWORD: 'password'
+      TEST_USER_USERNAME: 'john'
+      TEST_USER_PASSWORD: 'johndoe'
+      JWT_SECRETKEY: 'Juw34WOQg0Rn397En9Ek+LSH4fDEl4QSBGeN1izonY6xA2/sJLVQs2I5vT5ydJxclQUaiLNc2xqlpcodiEnQ5nGiKCXtBbmO6jkpsxBV/h9HgpzmtkSiahnqolPzE0pPEsEQBa2Sow4pLM1yRahGhKoHUBHEykKL8ADJPyJ4n578th4s5vYAaErhBnJ9rVua42RiQLa8avCo6yiKskfAdKegJvdUv/jkZNrXzeIwvjmVQvoUWvtYDgsKP/8RSBkQ5c0snaDQ/Bl7XaPsp/rk1Cy6FW6pb4p6RMyBwVsFxtMEGkM0rxjpUkinIwRxidkk5aeMU8xjx+IH9D5CIAPZzM9GgzbI7WNHMKQKp8iUkC4='
+      TOKEN_VALIDITY_TIME_IN_MINUTE: 60
 
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +24,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
-          java-version: '17'
+          java-version: '21'
 
       - name: Unit tests
         run: mvn -B test --file pom.xml
@@ -39,6 +43,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
+          file: ./docker/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/blog_spring:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mtgbox:latest
