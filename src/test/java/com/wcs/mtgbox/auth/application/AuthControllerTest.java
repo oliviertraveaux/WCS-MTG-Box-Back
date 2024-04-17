@@ -57,7 +57,7 @@ AuthControllerTest {
                 .andReturn()
         ;
 
-        assertNotNull(result.getResponse().getContentType());
+        assertNotNull(result.getResponse().getCookies());
     }
 
     @Test
@@ -151,7 +151,7 @@ AuthControllerTest {
                 .andReturn()
                 ;
 System.out.println("token : " + result.getResponse().getContentAsString());
-        assertNotNull(result.getResponse().getContentType());
+        assertNotNull(result.getResponse().getCookies());
     }
 }
 
