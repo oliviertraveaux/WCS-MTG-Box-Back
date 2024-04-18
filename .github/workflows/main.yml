@@ -56,6 +56,5 @@ jobs:
           script: |
             cd WCS-MTG-Box-Back
             git pull 
-            cd docker
-            echo "${{secrets.ENV_DEV}}" > .env
+            cd docker           
             docker compose up -d
