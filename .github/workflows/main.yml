@@ -46,19 +46,19 @@ jobs:
           export-env: true
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          MYSQL_DATABASE: op://mtgbox/MYSQL_DATABASE
-          MYSQL_USER: op://mtgbox/MYSQL_USER
-          MYSQL_PASSWORD: op://mtgbox/MYSQL_PASSWORD
-          MYSQL_ROOT_PASSWORD: op://mtgbox/MYSQL_ROOT_PASSWORD
-          MYSQL_PORT: op://mtgbox/MYSQL_PORT
+          MYSQL_DATABASE: op://mtgbox/APP_ENV/APP_ENV/MYSQL_DATABASE
+          MYSQL_USER: op://mtgbox/APP_ENV/APP_ENV/MYSQL_USER
+          MYSQL_PASSWORD: op://mtgbox/APP_ENV/APP_ENV/MYSQL_PASSWORD
+          MYSQL_ROOT_PASSWORD: op://mtgbox/APP_ENV/APP_ENV/MYSQL_ROOT_PASSWORD
+          MYSQL_PORT: op://mtgbox/APP_ENV/APP_ENV/MYSQL_PORT
 
-          APP_PORT: op://mtgbox/APP_PORT
-          APP_SPRING_DATASOURCE_URL: op://mtgbox/APP_SPRING_DATASOURCE_URL
-          APP_SPRING_DATASOURCE_USERNAME: op://mtgbox/APP_SPRING_DATASOURCE_USERNAME
-          APP_SPRING_DATASOURCE_PASSWORD: op://mtgbox/APP_SPRING_DATASOURCE_PASSWORD
-          APP_SPRING_JPA_HIBERNATE_DDL_AUTO: op://mtgbox/APP_SPRING_JPA_HIBERNATE_DDL_AUTO
-          JWT_SECRETKEY: op://mtgbox/JWT_SECRETKEY
-          JTW_TOKENVALIDITYTIMEINMINUTE: op://mtgbox/JTW_TOKENVALIDITYTIMEINMINUTE
+          APP_PORT: op://mtgbox/APP_ENV/APP_ENV/APP_PORT
+          APP_SPRING_DATASOURCE_URL: op://mtgbox/APP_ENV/APP_ENV/APP_SPRING_DATASOURCE_URL
+          APP_SPRING_DATASOURCE_USERNAME: op://mtgbox/APP_ENV/APP_ENV/APP_SPRING_DATASOURCE_USERNAME
+          APP_SPRING_DATASOURCE_PASSWORD: op://mtgbox/APP_ENV/APP_ENV/APP_SPRING_DATASOURCE_PASSWORD
+          APP_SPRING_JPA_HIBERNATE_DDL_AUTO: op://mtgbox/APP_ENV/APP_ENV/APP_SPRING_JPA_HIBERNATE_DDL_AUTO
+          JWT_SECRETKEY: op://mtgbox/APP_ENV/APP_ENV/JWT_SECRETKEY
+          JTW_TOKENVALIDITYTIMEINMINUTE: op://mtgbox/APP_ENV/APP_ENV/JTW_TOKENVALIDITYTIMEINMINUTE
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -79,7 +79,6 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd WCS-MTG-Box-Back
-            git checkout dev
             git pull 
             cd docker
             docker compose up -d
