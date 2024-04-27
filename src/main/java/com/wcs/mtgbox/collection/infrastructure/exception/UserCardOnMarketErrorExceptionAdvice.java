@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class CardNotFoundErrorExceptionAdvice {
-    @ExceptionHandler(CardNotFoundErrorException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String errorGetCardHandler(CardNotFoundErrorException ex) {
+
+public class UserCardOnMarketErrorExceptionAdvice {
+    @ExceptionHandler(UserCardOnMarketErrorException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String MarketCardErrorException(UserCardOnMarketErrorException ex) {
         return ex.getMessage();
     }
 }
