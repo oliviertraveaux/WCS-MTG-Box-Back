@@ -28,6 +28,9 @@ public class SecurityConfig {
             "/api/v1/filters/**",
             "/api/v1/filters/**",
             "/api/v1/logout",
+            "/api/v1/verify-token",
+            "/api/v1/password-forgotten/**",
+            "/api/v1/new-password/**",
     };
 
     @Bean
@@ -58,15 +61,16 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
                         .ignoringRequestMatchers("/api/v1/register",
                                 "/api/v1/login",
+                                "/api/v1/register",
                                 "/api/v1/users/**",
-                                "/api/v1/apicards",
                                 "/api/v1/apicards/**",
-                                "/api/v1/collection-cards",
                                 "/api/v1/collection-cards/**",
-                                "/api/v1/upload",
                                 "/api/v1/upload/**",
                                 "/files",
                                 "/api/v1/verify-token",
+                                "/api/v1/logout",
+                                "/api/v1/password-forgotten/**",
+                                "/api/v1/new-password/**",
                                 "/uploads")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
