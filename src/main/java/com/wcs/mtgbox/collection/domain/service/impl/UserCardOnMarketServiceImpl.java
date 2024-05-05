@@ -58,7 +58,8 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
         return userCard.getIsActive()
                 && userCard.getUser().getIsActive()
                 && !userCard.getUser().getIsBanned()
-                && (allParams.containsKey("department") ? String.valueOf(userCard.getUser().getDepartment()).equals(allParams.get("department")) : true);
+                && (allParams.containsKey("department") ? String.valueOf(userCard.getUser().getDepartment()).equals(allParams.get("department")) : true)
+                && (!allParams.containsKey("language") || String.valueOf(userCard.getCardLanguage().getName()).equals(allParams.get("language")));
     }
 
 
@@ -94,7 +95,7 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
                 case "set":
                     spec = spec.and((root, query, cb) -> cb.equal(root.get("setAbbreviation"), value));
                     break;
-                case "department":
+                case "department", "language":
                     break;
                 default:
                     throw new UserCardOnMarketErrorException();
