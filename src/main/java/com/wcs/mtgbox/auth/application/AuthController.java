@@ -29,13 +29,13 @@ public class AuthController {
     private final JwtTokenService jwtTokenService;
     private final UserDetailsService userDetailsService;
     private final UserRegistrationService userRegistrationService;
-    private final PasswordForgottenService passwordForgottenService; // Ajoutez cette ligne
+    private final PasswordForgottenService passwordForgottenService;
     public UserMapper userMapper = new UserMapper();
 
     public AuthController(
             UserLoginService userLoginService,
             JwtTokenService jwtTokenService,
-            PasswordForgottenService passwordForgottenService, // Mettez à jour cette ligne
+            PasswordForgottenService passwordForgottenService,
             UserDetailsService userDetailsService,
             UserRegistrationService userRegistrationService,
             UserRepository userRepository) {
@@ -43,7 +43,7 @@ public class AuthController {
         this.jwtTokenService = jwtTokenService;
         this.userDetailsService = userDetailsService;
         this.userRegistrationService = userRegistrationService;
-        this.passwordForgottenService = passwordForgottenService; // Ajoutez cette ligne
+        this.passwordForgottenService = passwordForgottenService;
     }
 
     @PostMapping(value = "api/v1/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -89,7 +89,6 @@ public class AuthController {
         try {
             return ResponseEntity.status(201).body(passwordForgottenService.tokenGenerator(email));
         } catch (Exception e) {
-            //throw new PasswordForgottenErrorException(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
