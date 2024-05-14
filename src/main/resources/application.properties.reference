@@ -13,3 +13,10 @@ jwt.tokenValidityTimeInMinute=60
 
 test.user.username="jack"
 test.user.password="password123"
+
+test.user.password="password123"
+mailjet.apiKey=e9e361731558d8ae767495a73ebf5a9f
+mailjet.apiSecret=35de473645b008cd126a0429adfb1ab9
+mailjet.userEmail=mail@free.fr
+urlMailToken =http://www.mtg.com/forgotten-password/
+
