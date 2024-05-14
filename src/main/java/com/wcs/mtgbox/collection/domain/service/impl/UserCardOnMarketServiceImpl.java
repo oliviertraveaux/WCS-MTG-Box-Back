@@ -58,7 +58,7 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
         return userCard.getIsActive()
                 && userCard.getUser().getIsActive()
                 && !userCard.getUser().getIsBanned()
-                && (allParams.containsKey("department") ? String.valueOf(userCard.getUser().getDepartment()).equals(allParams.get("department")) : true)
+                && (!allParams.containsKey("location") || String.valueOf(userCard.getUser().getDepartment()).equals(allParams.get("location")))
                 && (!allParams.containsKey("language") || String.valueOf(userCard.getCardLanguage().getName()).equals(allParams.get("language")));
     }
 
@@ -68,13 +68,21 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
     private List<Card> getCards(Map<String, String> allParams) {
         Specification<Card> spec = Specification.where(null);
 
+        String cardName;
+
+        if (allParams.containsKey("language") && allParams.get("language").equals("French")) {
+            cardName = "frenchName";
+        } else {
+            cardName = "name";
+        }
+
         for (Map.Entry<String, String> entry : allParams.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
 
             switch (key) {
                 case "name":
-                    spec = spec.and((root, query, cb) -> cb.like(root.get("name"), "%" + value + "%"));
+                    spec = spec.and((root, query, cb) -> cb.like(root.get(cardName), "%" + value + "%"));
                     break;
                 case "cmc":
                     int cost = Integer.parseInt(value);
@@ -95,7 +103,7 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
                 case "set":
                     spec = spec.and((root, query, cb) -> cb.equal(root.get("setAbbreviation"), value));
                     break;
-                case "department", "language":
+                case "location", "language":
                     break;
                 default:
                     throw new UserCardOnMarketErrorException();
