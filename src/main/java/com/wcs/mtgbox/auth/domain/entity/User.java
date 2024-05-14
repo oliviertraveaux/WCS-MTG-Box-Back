@@ -41,8 +41,8 @@ public class User {
     @Column(name = "is_banned", nullable = false)
     private Boolean isBanned = false;
 
-    @Column(name = "post_code", nullable = false)
-    private int postCode;
+    @Column(name = "department", nullable = false)
+    private int department;
 
     @Column(name = "city", nullable = false)
     private String city;

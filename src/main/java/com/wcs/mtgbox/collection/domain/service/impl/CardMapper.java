@@ -3,16 +3,18 @@ package com.wcs.mtgbox.collection.domain.service.impl;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.collection.domain.dto.AddCollectionCardDto;
 import com.wcs.mtgbox.collection.domain.dto.CollectionCardDto;
+import com.wcs.mtgbox.collection.domain.dto.UserCardOnMarketSearchResultDto;
+import com.wcs.mtgbox.collection.domain.dto.UserCardOnMarketDto;
 import com.wcs.mtgbox.collection.domain.entity.Card;
 import com.wcs.mtgbox.collection.domain.entity.CardLanguage;
 import com.wcs.mtgbox.collection.domain.entity.CardQuality;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
-import com.wcs.mtgbox.collection.domain.model.CardBasicInfo;
 import com.wcs.mtgbox.collection.domain.model.CardBasicInfoWithId;
 import com.wcs.mtgbox.collection.domain.model.CardUserInfo;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CardMapper {
@@ -67,5 +69,42 @@ public class CardMapper {
         cardDto.getUserInfo().setLanguageName(userCard.getCardLanguage().getName());
 
         return cardDto;
+    }
+
+    public UserCardOnMarketSearchResultDto userCardToUserCardOnMarketSearchResultDto(Card card, List<UserCard> userCards) {
+
+        List<UserCardOnMarketDto> userCardsOnMarket = new ArrayList<>();
+        for (UserCard userCard : userCards) {
+            userCardsOnMarket.add(userCardToUserCardOnMarketDto(userCard));
+        }
+
+        UserCardOnMarketSearchResultDto userCardOnMarketSearchResultDto = new UserCardOnMarketSearchResultDto();
+        userCardOnMarketSearchResultDto.setCardId(card.getId());
+        userCardOnMarketSearchResultDto.setName(card.getName());
+        userCardOnMarketSearchResultDto.setImageUrl(card.getImageUrl());
+        userCardOnMarketSearchResultDto.setFrenchImageUrl(card.getFrenchImageUrl());
+        userCardOnMarketSearchResultDto.setSetAbbreviation(card.getSetAbbreviation());
+        userCardOnMarketSearchResultDto.setSetName(card.getSetName());
+        userCardOnMarketSearchResultDto.setRarity(card.getRarity());
+        userCardOnMarketSearchResultDto.setArtist(card.getArtist());
+        userCardOnMarketSearchResultDto.setText(card.getText());
+        userCardOnMarketSearchResultDto.setUserCardsOnMarket(userCardsOnMarket);
+
+        return userCardOnMarketSearchResultDto;
+    }
+
+    public UserCardOnMarketDto userCardToUserCardOnMarketDto(UserCard userCard) {
+        UserCardOnMarketDto userCardOnMarketDto = new UserCardOnMarketDto();
+        userCardOnMarketDto.setUserCardId(userCard.getId());
+        userCardOnMarketDto.setUserId(userCard.getUser().getId());
+        userCardOnMarketDto.setUserName(userCard.getUser().getUsername());
+        userCardOnMarketDto.setCity(userCard.getUser().getCity());
+        userCardOnMarketDto.setQuality(userCard.getCardQuality().getName());
+        userCardOnMarketDto.setLanguage(userCard.getCardLanguage().getName());
+        userCardOnMarketDto.setDepartment(userCard.getUser().getDepartment());
+        // TODO (set to false by default for now)
+        userCardOnMarketDto.setHasAnOffer(false);
+
+        return userCardOnMarketDto;
     }
 }

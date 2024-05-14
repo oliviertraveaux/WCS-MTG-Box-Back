@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface UserCardRepository extends JpaRepository<UserCard, Long> {
     List<UserCard> findAllByUserId(Long userId);
+    List<UserCard> findAllByCardId(Long cardId);
     void deleteById(Long userCardId);
 }
