@@ -13,6 +13,7 @@ public class UserCardOnMarketSearchResultDto {
     private Long cardId;
     private String name;
     private String imageUrl;
+    private String frenchName;
     private String frenchImageUrl;
     private String setAbbreviation;
     private String setName;

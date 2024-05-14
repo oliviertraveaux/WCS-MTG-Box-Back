@@ -82,6 +82,7 @@ public class CardMapper {
         userCardOnMarketSearchResultDto.setCardId(card.getId());
         userCardOnMarketSearchResultDto.setName(card.getName());
         userCardOnMarketSearchResultDto.setImageUrl(card.getImageUrl());
+        userCardOnMarketSearchResultDto.setFrenchName(card.getFrenchName());
         userCardOnMarketSearchResultDto.setFrenchImageUrl(card.getFrenchImageUrl());
         userCardOnMarketSearchResultDto.setSetAbbreviation(card.getSetAbbreviation());
         userCardOnMarketSearchResultDto.setSetName(card.getSetName());
