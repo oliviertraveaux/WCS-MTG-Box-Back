@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
@@ -149,12 +150,20 @@ public class JwtTokenServiceImpl implements JwtTokenService {
             if (user == null) {
                 throw new Exception("User not found");
             }
+            updateLastConnectionDate(user.getId());
 
             UserDTO userDTO = userMapper.transformUserEntityInUserDto(Optional.of(user));
             return ResponseEntity.ok().body(userDTO);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("An error occurred while processing the token");
+        }
+    }
+    private void updateLastConnectionDate(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            user.get().setLastConnectionDate(LocalDateTime.now());
+            userRepository.save(user.get());
         }
     }
 }

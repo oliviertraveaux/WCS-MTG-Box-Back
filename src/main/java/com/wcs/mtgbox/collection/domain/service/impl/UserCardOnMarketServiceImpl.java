@@ -7,9 +7,11 @@ import com.wcs.mtgbox.collection.domain.service.UserCardOnMarketService;
 import com.wcs.mtgbox.collection.infrastructure.exception.UserCardOnMarketErrorException;
 import com.wcs.mtgbox.collection.infrastructure.repository.CardRepository;
 import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,9 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
     private final CardRepository cardRepository;
     private final UserCardRepository userCardRepository;
     private final CardMapper cardMapper;
+
+    @Value("${lastConnexionDelay}")
+    private int LAST_CONNEXION_DELAY;
 
 
     public UserCardOnMarketServiceImpl(CardRepository cardRepository, UserCardRepository userCardRepository, CardMapper cardMapper) {
@@ -59,9 +64,13 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
                 && userCard.getUser().getIsActive()
                 && !userCard.getUser().getIsBanned()
                 && (!allParams.containsKey("location") || String.valueOf(userCard.getUser().getDepartment()).equals(allParams.get("location")))
-                && (!allParams.containsKey("language") || String.valueOf(userCard.getCardLanguage().getName()).equals(allParams.get("language")));
+                && (!allParams.containsKey("language") || String.valueOf(userCard.getCardLanguage().getName()).equals(allParams.get("language")))
+                && (!allParams.containsKey("recentlyConnected") || isUserConnectedRecently(userCard.getUser().getLastConnectionDate()));
     }
 
+    private boolean isUserConnectedRecently(LocalDateTime lastConnectionDate) {
+        return lastConnectionDate.isAfter(LocalDateTime.now().minusDays(LAST_CONNEXION_DELAY));
+    }
 
     // This method build specification based on query params.
     // CardRepository must extend JpaSpecificationExecutor to make it work
@@ -103,7 +112,7 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
                 case "set":
                     spec = spec.and((root, query, cb) -> cb.equal(root.get("setAbbreviation"), value));
                     break;
-                case "location", "language":
+                case "location", "language", "recentlyConnected":
                     break;
                 default:
                     throw new UserCardOnMarketErrorException();
