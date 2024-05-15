@@ -67,4 +67,20 @@ public class User {
     @JoinColumn(name = "file_id")
     private Media media;
 
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PasswordToken> passwordTokens;
+
+    @Getter
+    @Setter
+    @Transient
+    private String plainPassword;
+
+    @Setter
+    @Getter
+    @Transient
+    private String plainPasswordVerification;
+
+
 }
