@@ -2,6 +2,8 @@ package com.wcs.mtgbox.collection.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wcs.mtgbox.auth.domain.entity.User;
+import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
+import com.wcs.mtgbox.transaction.offer.domain.entity.OfferUserCard;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,5 +38,12 @@ public class UserCard {
 
     @Column(name = "is_active")
     private Boolean isActive;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "offer_id", nullable = false)
+    private Offer offer;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "offer_user_card_id")
+    private OfferUserCard offerUserCard;
 
 }
