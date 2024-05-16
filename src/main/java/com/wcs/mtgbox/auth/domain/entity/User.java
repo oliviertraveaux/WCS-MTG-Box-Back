@@ -57,7 +57,7 @@ public class User {
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -65,13 +65,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserCard> userCards;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "file_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "file_id" )
     private Media media;
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PasswordToken> passwordTokens;
 
     @Getter

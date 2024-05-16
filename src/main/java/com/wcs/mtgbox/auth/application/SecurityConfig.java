@@ -31,8 +31,8 @@ public class SecurityConfig {
             "/api/v1/password-forgotten/**",
             "/api/v1/new-password/**",
             "/api/v1/marketcards",
-            "/api/v1/marketcards/**",
-            "/api/v1/users/**",
+            "/api/v1/marketcards/**"
+
     };
 
     @Bean
@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 "/api/v1/upload",
                                 "/api/v1/upload/**",
                                 "/files",
+                                "/api/v1/users/**",
                                 "api/v1/logout","/api/v1/verify-token"
 
 

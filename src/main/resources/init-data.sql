@@ -19,7 +19,7 @@ INSERT INTO card_language (name) VALUES
 INSERT INTO role (type) VALUES
                             ('USER'),
                             ('ADMIN');
-INSERT INTO `user` (user_name, email, password, is_active, is_banned, post_code, city, last_connection_date, creation_date, role_id)
+INSERT INTO `user` (user_name, email, password, is_active, is_banned, department, city, last_connection_date, creation_date, role_id)
 VALUES
     ('john_doe', 'john@example.com', 'password123', true, false, 12345, 'New York', NOW(), NOW(), 1),
     ('jane_doe', 'jane@example.com', 'password456', true, false, 54321, 'Los Angeles', NOW(), NOW(), 2);
