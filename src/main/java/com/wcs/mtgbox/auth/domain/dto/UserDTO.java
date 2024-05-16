@@ -16,7 +16,7 @@ public class UserDTO {
     private String email;
     private Boolean isActive;
     private Boolean isBanned;
-    private int postCode;
+    private int department;
     private String city;
     private LocalDateTime lastConnectionDate;
     private LocalDateTime creationDate;
@@ -26,13 +26,13 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String username, String email, Boolean isActive, Boolean isBanned, int postCode, String city, LocalDateTime lastConnectionDate, LocalDateTime creationDate, Role role) {
+    public UserDTO(Long id, String username, String email, Boolean isActive, Boolean isBanned, int department, String city, LocalDateTime lastConnectionDate, LocalDateTime creationDate, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.isActive = isActive;
         this.isBanned = isBanned;
-        this.postCode = postCode;
+        this.department = department;
         this.city = city;
         this.lastConnectionDate = lastConnectionDate;
         this.creationDate = creationDate;
