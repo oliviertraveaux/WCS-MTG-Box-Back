@@ -2,6 +2,7 @@ package com.wcs.mtgbox.auth.domain.entity;
 
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.files.domain.entity.Media;
+import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -84,5 +85,7 @@ public class User {
     @Transient
     private String plainPasswordVerification;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Offer> offers;
 
 }
