@@ -8,10 +8,12 @@ import com.wcs.mtgbox.collection.domain.entity.CardQuality;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.domain.model.CardBasicInfoWithId;
 import com.wcs.mtgbox.collection.domain.model.CardUserInfo;
+import com.wcs.mtgbox.collection.infrastructure.exception.UserCardNotFoundErrorException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardMapper {
@@ -104,5 +106,28 @@ public class CardMapper {
         userCardOnMarketDto.setHasAnOffer(false);
 
         return userCardOnMarketDto;
+    }
+
+    public CardAdDto userCardToCardAdDto(Optional<UserCard> userCard) {
+        if (userCard.isEmpty()){
+            throw new UserCardNotFoundErrorException();
+        }
+        CardAdDto cardAdDto = new CardAdDto();
+        userCard.ifPresent(
+                userCardToReturn -> {
+                    cardAdDto.setCardId(userCardToReturn.getCard().getId());
+                    cardAdDto.setName(userCardToReturn.getCard().getName());
+                    cardAdDto.setImageUrl(userCardToReturn.getCard().getImageUrl());
+                    cardAdDto.setFrenchName(userCardToReturn.getCard().getFrenchName());
+                    cardAdDto.setFrenchImageUrl(userCardToReturn.getCard().getFrenchImageUrl());
+                    cardAdDto.setSetAbbreviation(userCardToReturn.getCard().getSetAbbreviation());
+                    cardAdDto.setSetName(userCardToReturn.getCard().getSetName());
+                    cardAdDto.setRarity(userCardToReturn.getCard().getRarity());
+                    cardAdDto.setArtist(userCardToReturn.getCard().getArtist());
+                    cardAdDto.setText(userCardToReturn.getCard().getText());
+                    cardAdDto.setUserCard(this.userCardToUserCardOnMarketDto(userCardToReturn));
+                }
+        );
+        return cardAdDto;
     }
 }
