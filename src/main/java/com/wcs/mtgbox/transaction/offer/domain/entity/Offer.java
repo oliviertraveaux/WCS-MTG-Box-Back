@@ -36,9 +36,14 @@ public class Offer {
     @Column(name = "created_date",  nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "accepted_date",  nullable = false)
+    @Column(name = "accepted_date")
     private LocalDateTime acceptedDate;
 
-    @OneToMany(mappedBy = "offer", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    private List<OfferUserCard> offerUserCard;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "offer_user_card",
+            joinColumns = @JoinColumn(name = "offer_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_card_id")
+    )
+    private List<UserCard> userCards;
 }

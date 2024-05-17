@@ -53,7 +53,9 @@ public class SecurityConfig {
                                 "/api/v1/upload",
                                 "/api/v1/upload/**",
                                 "/files",
-                                "api/v1/logout","/api/v1/verify-token"
+                                "api/v1/logout","/api/v1/verify-token",
+                                "/api/v1/offer/",
+                                "/api/v1/offer/**"
                         ).authenticated()
                 )
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
@@ -71,6 +73,8 @@ public class SecurityConfig {
                                 "/api/v1/new-password/**",
                                 "/api/v1/marketcards",
                                 "/api/v1/marketcards/**",
+                                "/api/v1/offer/",
+                                "/api/v1/offer/**",
                                 "/uploads")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
