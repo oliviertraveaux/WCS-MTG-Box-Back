@@ -31,7 +31,8 @@ public class SecurityConfig {
             "/api/v1/password-forgotten/**",
             "/api/v1/new-password/**",
             "/api/v1/marketcards",
-            "/api/v1/marketcards/**"
+            "/api/v1/marketcards/**",
+            "/api/v1/card-ad/**"
     };
 
     @Bean
@@ -75,6 +76,7 @@ public class SecurityConfig {
                                 "/api/v1/marketcards/**",
                                 "/api/v1/offer/",
                                 "/api/v1/offer/**",
+                                "/api/v1/card-ad/**",
                                 "/uploads")
                         .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
