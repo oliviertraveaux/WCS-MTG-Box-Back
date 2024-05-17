@@ -1,10 +1,7 @@
 package com.wcs.mtgbox.collection.domain.service.impl;
 
 import com.wcs.mtgbox.auth.domain.entity.User;
-import com.wcs.mtgbox.collection.domain.dto.AddCollectionCardDto;
-import com.wcs.mtgbox.collection.domain.dto.CollectionCardDto;
-import com.wcs.mtgbox.collection.domain.dto.UserCardOnMarketSearchResultDto;
-import com.wcs.mtgbox.collection.domain.dto.UserCardOnMarketDto;
+import com.wcs.mtgbox.collection.domain.dto.*;
 import com.wcs.mtgbox.collection.domain.entity.Card;
 import com.wcs.mtgbox.collection.domain.entity.CardLanguage;
 import com.wcs.mtgbox.collection.domain.entity.CardQuality;
