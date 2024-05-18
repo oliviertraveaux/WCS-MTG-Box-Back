@@ -6,12 +6,15 @@ import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.infrastructure.exception.UserCardNotFoundErrorException;
 import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
+import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferDto;
 import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.OfferRepository;
+import com.wcs.mtgbox.transaction.offer.infrastructure.exception.OfferNotFoundErrorException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +25,8 @@ public class OfferServiceImpl implements OfferService {
     private final UserCardRepository userCardRepository;
     private final OfferMapper offerMapper;
 
-    public OfferServiceImpl(OfferRepository offerRepository, UserRepository userRepository, UserCardRepository userCardRepository, OfferMapper offerMapper) {
+    public OfferServiceImpl(OfferRepository offerRepository, UserRepository userRepository, UserCardRepository userCardRepository, OfferMapper offerMapper
+    ) {
         this.offerRepository = offerRepository;
         this.userRepository = userRepository;
         this.userCardRepository = userCardRepository;
@@ -30,11 +34,29 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferDto saveOffer(OfferDto offerDto) {
-        UserCard wantedUserCard = userCardRepository.findById(offerDto.getWantedUserCardId()).orElseThrow(UserCardNotFoundErrorException::new);
-        List<UserCard> userCards= userCardRepository.findAllById(offerDto.getUserCardIds());
-        User user = userRepository.findById(offerDto.getUserId()).orElseThrow(UserNotFoundErrorException::new);
-        Offer offer = offerRepository.save(offerMapper.offerDtoToOfferEntity(user, userCards, wantedUserCard));
+    public OfferCreationDto saveOffer(OfferCreationDto offerCreationDto) {
+        UserCard wantedUserCard = userCardRepository.findById(offerCreationDto.getWantedUserCardId()).orElseThrow(UserCardNotFoundErrorException::new);
+        List<UserCard> userCards= userCardRepository.findAllById(offerCreationDto.getUserCardIds());
+        User user = userRepository.findById(offerCreationDto.getUserId()).orElseThrow(UserNotFoundErrorException::new);
+        Offer offer = offerRepository.save(offerMapper.offerCreationDtoToOfferEntity(user, userCards, wantedUserCard));
+        return offerMapper.offerEntityToOfferCreationDto(offer);
+    }
+
+    @Override
+    public OfferDto getOfferById(Long offerId) {
+        Offer offer = offerRepository.findById(offerId).orElseThrow(OfferNotFoundErrorException::new);
         return offerMapper.offerEntityToOfferDto(offer);
+    }
+
+    @Override
+    public List<OfferDto> getOffersByUserCardId(Long userCardId) {
+        UserCard userCard = userCardRepository.findById(userCardId).orElseThrow(UserCardNotFoundErrorException::new);
+        List<Offer> cardAdOffers = offerRepository.findAllByWantedUserCard_Id(userCard.getId());
+        List<OfferDto> offerDtoList = new ArrayList<>();
+        cardAdOffers.forEach(offer -> {
+            OfferDto offerFulldto = offerMapper.offerEntityToOfferDto(offer);
+            offerDtoList.add(offerFulldto);
+        });
+        return offerDtoList;
     }
 }
