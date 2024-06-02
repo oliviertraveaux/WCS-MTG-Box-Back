@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -158,5 +159,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("An error occurred while processing the token");
         }
+    }
+
+    @Override
+    public void reloadJwtCookie(HttpServletResponse response, UserDetails userDetails) {
+        Token newToken = generateToken(userDetails);
+        ResponseCookie jwtCookie = createJwtCookie(newToken.getToken());
+        response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
     }
 }

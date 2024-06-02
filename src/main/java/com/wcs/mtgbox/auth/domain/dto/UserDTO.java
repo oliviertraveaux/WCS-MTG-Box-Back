@@ -16,7 +16,7 @@ public class UserDTO {
     private String email;
     private Boolean isActive;
     private Boolean isBanned;
-    private int postCode;
+    private int Department;
     private String city;
     private LocalDateTime lastConnectionDate;
     private LocalDateTime creationDate;
@@ -32,7 +32,7 @@ public class UserDTO {
         this.email = email;
         this.isActive = isActive;
         this.isBanned = isBanned;
-        this.postCode = postCode;
+        this.Department = Department;
         this.city = city;
         this.lastConnectionDate = lastConnectionDate;
         this.creationDate = creationDate;
