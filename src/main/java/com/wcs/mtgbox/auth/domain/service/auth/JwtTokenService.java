@@ -27,4 +27,8 @@ public interface JwtTokenService {
     void deleteCookie(HttpServletResponse response, String cookieName);
 
     ResponseEntity<?> verifyToken(HttpServletRequest request);
+
+    void reloadJwtCookie(HttpServletResponse response, UserDetails userDetails);
+
+
 }

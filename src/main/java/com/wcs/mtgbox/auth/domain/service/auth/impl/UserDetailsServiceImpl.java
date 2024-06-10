@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
 import com.wcs.mtgbox.auth.domain.dto.UserPrincipal;
+import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new UserPrincipal(userRepository.findByUsername(username));
+        User user = userRepository.findByUsername(username);
+        return new UserPrincipal(user);
     }
+
+
 }

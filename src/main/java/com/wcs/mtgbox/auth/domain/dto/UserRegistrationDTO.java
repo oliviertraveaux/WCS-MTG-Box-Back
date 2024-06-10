@@ -9,14 +9,14 @@ public class UserRegistrationDTO {
     private String username;
     private String email;
     private String password;
-    private int postCode;
+    private int Department;
     private String city;
 
-    public UserRegistrationDTO(String username, String email, String password, int postCode, String city) {
+    public UserRegistrationDTO(String username, String email, String password, int Department, String city) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.postCode = postCode;
+        this.Department =Department;
         this.city = city;
     }
 

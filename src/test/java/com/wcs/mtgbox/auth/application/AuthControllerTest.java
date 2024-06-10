@@ -102,7 +102,7 @@ AuthControllerTest {
        JSONObject jsonUser = new JSONObject();
        jsonUser.put("email", "bob@doe.com");
        jsonUser.put("username", "bob");
-       jsonUser.put("postCode", 31000);
+       jsonUser.put("Department", 31);
        jsonUser.put("city", "Toulouse");
        jsonUser.put("password", "azerty");
 
@@ -113,7 +113,7 @@ AuthControllerTest {
                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("bob@doe.com"))
                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("bob"))
-               .andExpect(MockMvcResultMatchers.jsonPath("$.postCode").value(31000))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.department").value(31))
                .andExpect(MockMvcResultMatchers.jsonPath("$.city").value("Toulouse"))
                ;
 
