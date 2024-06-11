@@ -34,6 +34,8 @@ public class SecurityConfig {
             "/api/v1/marketcards/**",
             "/api/v1/card-ad/**",
             "/api/v1/verify-token",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
 
     };
 
