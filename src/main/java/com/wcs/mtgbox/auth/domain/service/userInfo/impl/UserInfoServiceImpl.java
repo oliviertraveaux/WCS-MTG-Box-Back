@@ -9,21 +9,28 @@ import com.wcs.mtgbox.auth.domain.service.auth.impl.UserMapper;
 import com.wcs.mtgbox.auth.domain.service.userInfo.UserInfoService;
 import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
+import com.wcs.mtgbox.collection.domain.entity.UserCard;
+import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
 
     private final UserRepository userRepository;
+    private final UserCardRepository userCardRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenService jwtTokenService;
@@ -34,13 +41,16 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserMapper userMapper,
             BCryptPasswordEncoder passwordEncoder,
             JwtTokenService jwtTokenService,
-            UserDetailsServiceImpl userDetailsService
+            UserDetailsServiceImpl userDetailsService,
+            UserCardRepository userCardRepository, UserCardRepository userCardRepository1
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenService = jwtTokenService;
         this.userDetailsService = userDetailsService;
+
+        this.userCardRepository = userCardRepository1;
     }
 
     @Override
@@ -166,7 +176,50 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .getId();
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteUser(Long userId, HttpServletResponse response) {
+        try {
+            // Récupérer l'utilisateur à supprimer
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Trouver l'utilisateur "deletedUser"
+            User deletedUser = userRepository.findByUsername("deletedUser");
+
+            // Transférer toutes les cartes inactives à "deletedUser"
+            List<UserCard> inactiveUserCards = user.getUserCards().stream()
+                    .filter(userCard -> !userCard.getIsActive())
+                    .collect(Collectors.toList());
+
+            for (UserCard userCard : inactiveUserCards) {
+                userCard.setUser(deletedUser);
+            }
+
+            // Sauvegarder les cartes mises à jour
+            userCardRepository.saveAll(inactiveUserCards);
+
+            // Synchroniser l'état persistant avec la base de données
+            userCardRepository.flush();
+
+            // Supprimer l'utilisateur d'origine
+            userRepository.delete(user);
+
+            // Supprimer le cookie JWT
+            jwtTokenService.deleteCookie(response, "token");
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while deleting the user: " + e.getMessage());
+        }
+    }
+
+
     private boolean isAuthorized(HttpServletRequest request, Long id) {
         return !getUserIdFromToken(request).equals(id);
     }
+
 }
+
+
+

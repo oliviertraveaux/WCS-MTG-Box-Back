@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserInfoService {
     UserDTO GetUser(Long userId);
+    ResponseEntity<?> deleteUser(Long id, HttpServletResponse response);
     ResponseEntity<?> readOne(Long id, HttpServletRequest request);
     ResponseEntity<?> updateUsername(Long id, String newUsername, HttpServletRequest request, HttpServletResponse response);
     ResponseEntity<?> updatePassword(Long id, String newPassword, HttpServletRequest request);
