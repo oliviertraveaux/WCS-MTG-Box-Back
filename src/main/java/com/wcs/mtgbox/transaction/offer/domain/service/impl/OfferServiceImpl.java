@@ -8,6 +8,7 @@ import com.wcs.mtgbox.collection.infrastructure.exception.UserCardNotFoundErrorE
 import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferDto;
+import com.wcs.mtgbox.transaction.offer.domain.dto.OfferFullWantedCardDto;
 import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.OfferRepository;
@@ -36,7 +37,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public OfferCreationDto saveOffer(OfferCreationDto offerCreationDto) {
         UserCard wantedUserCard = userCardRepository.findById(offerCreationDto.getWantedUserCardId()).orElseThrow(UserCardNotFoundErrorException::new);
-        List<UserCard> userCards= userCardRepository.findAllById(offerCreationDto.getUserCardIds());
+        List<UserCard> userCards = userCardRepository.findAllById(offerCreationDto.getUserCardIds());
         User user = userRepository.findById(offerCreationDto.getUserId()).orElseThrow(UserNotFoundErrorException::new);
         Offer offer = offerRepository.save(offerMapper.offerCreationDtoToOfferEntity(user, userCards, wantedUserCard));
         return offerMapper.offerEntityToOfferCreationDto(offer);
@@ -59,4 +60,20 @@ public class OfferServiceImpl implements OfferService {
         });
         return offerDtoList;
     }
+
+    @Override
+    public List<OfferFullWantedCardDto> getOffersByUserId(Long userId) {
+        List<Offer> offers = offerRepository.findAllByUser_Id(userId);
+        return offers.stream()
+                .map(offer -> offerMapper.offerEntityToOfferReceivedDto(offer)).toList();
+    }
+
+
+    @Override
+    public List<OfferFullWantedCardDto> getOffersReceivedByUserId(Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundErrorException::new);
+            List<Offer> offers = offerRepository.findAllByWantedUserCard_User_Id(userId);
+            return offers.stream()
+                    .map(offer -> offerMapper.offerEntityToOfferReceivedDto(offer)).toList();
+        }
 }

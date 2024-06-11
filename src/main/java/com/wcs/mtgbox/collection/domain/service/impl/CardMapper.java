@@ -46,8 +46,9 @@ public class CardMapper {
         return userCard;
     }
 
-    public CollectionCardDto cardAndUserCardEntityToCollectionCardDtoTo(Card cardInfo, UserCard userCard) {
+    public CollectionCardDto userCardEntityToCollectionCardDto(UserCard userCard) {
         CollectionCardDto cardDto = new CollectionCardDto(new CardBasicInfoWithId(), new CardUserInfo());
+        Card cardInfo = userCard.getCard();
 
         cardDto.getCardInfo().setUniqueId(cardInfo.getId());
         cardDto.getCardInfo().setApiCardId(cardInfo.getApiCardId());

@@ -2,11 +2,11 @@ package com.wcs.mtgbox.transaction.offer.domain.service.impl;
 
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.collection.domain.dto.CollectionCardDto;
-import com.wcs.mtgbox.collection.domain.entity.Card;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.domain.service.impl.CardMapper;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferDto;
+import com.wcs.mtgbox.transaction.offer.domain.dto.OfferFullWantedCardDto;
 import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
 import org.springframework.stereotype.Service;
 
@@ -53,11 +53,33 @@ public class OfferMapper {
 
         List<CollectionCardDto> collectionCards = new ArrayList<>();
         offer.getUserCards().forEach(userCard -> {
-            Card card = userCard.getCard();
-            CollectionCardDto collectionCardDto = cardMapper.cardAndUserCardEntityToCollectionCardDtoTo(card, userCard);
+            CollectionCardDto collectionCardDto = cardMapper.userCardEntityToCollectionCardDto(userCard);
             collectionCards.add(collectionCardDto);
         });
         offerDto.setUserCards(collectionCards);
         return offerDto;
+    }
+
+    OfferFullWantedCardDto offerEntityToOfferReceivedDto(Offer offer) {
+        CollectionCardDto wantedUserCard = cardMapper.userCardEntityToCollectionCardDto(offer.getWantedUserCard());
+
+        OfferFullWantedCardDto offerReceivedDto = new OfferFullWantedCardDto();
+        offerReceivedDto.setId(offer.getId());
+        offerReceivedDto.setWantedUserCard(wantedUserCard);
+        offerReceivedDto.setUserId(offer.getUser().getId());
+        offerReceivedDto.setUserName(offer.getUser().getUsername());
+        offerReceivedDto.setCity(offer.getUser().getCity());
+        offerReceivedDto.setDepartment(offer.getUser().getDepartment());
+        offerReceivedDto.setStatus(offer.getStatus());
+        offerReceivedDto.setCreatedDate(offer.getCreatedDate());
+        offerReceivedDto.setAcceptedDate(offer.getAcceptedDate());
+
+        List<CollectionCardDto> collectionCards = new ArrayList<>();
+        offer.getUserCards().forEach(userCard -> {
+            CollectionCardDto collectionCardDto = cardMapper.userCardEntityToCollectionCardDto(userCard);
+            collectionCards.add(collectionCardDto);
+        });
+        offerReceivedDto.setUserCards(collectionCards);
+        return offerReceivedDto;
     }
 }
