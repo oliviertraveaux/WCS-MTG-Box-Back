@@ -15,7 +15,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,12 +28,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
 
+
     private final UserRepository userRepository;
-    private final UserCardRepository userCardRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenService jwtTokenService;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserCardRepository userCardRepository;
+
 
     public UserInfoServiceImpl(
             UserRepository userRepository,
@@ -42,15 +43,14 @@ public class UserInfoServiceImpl implements UserInfoService {
             BCryptPasswordEncoder passwordEncoder,
             JwtTokenService jwtTokenService,
             UserDetailsServiceImpl userDetailsService,
-            UserCardRepository userCardRepository, UserCardRepository userCardRepository1
+            UserCardRepository userCardRepository
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenService = jwtTokenService;
         this.userDetailsService = userDetailsService;
-
-        this.userCardRepository = userCardRepository1;
+        this.userCardRepository = userCardRepository;
     }
 
     @Override
@@ -160,6 +160,47 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteUser(Long userId, HttpServletResponse response) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // select username = deletedUser => doit etre présent en BDD
+            User deletedUser = userRepository.findByUsername("deletedUser");
+            if (deletedUser == null) {
+                throw new RuntimeException("Deleted user entity not found");
+            }
+
+
+            List<UserCard> inactiveUserCards = user.getUserCards().stream()
+                    .filter(userCard -> !userCard.getIsActive())
+                    .collect(Collectors.toList());
+
+            for (UserCard userCard : inactiveUserCards) {
+                userCard.setUser(deletedUser);
+            }
+            userCardRepository.saveAll(inactiveUserCards);
+
+            // Remove active uscards active = true
+            List<UserCard> activeUserCards = user.getUserCards().stream()
+                    .filter(UserCard::getIsActive)
+                    .collect(Collectors.toList());
+
+            userCardRepository.deleteAll(activeUserCards);
+            
+            userRepository.delete(user);
+
+            jwtTokenService.deleteCookie(response, "token");
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while deleting the user: " + e.getMessage());
+        }
+    }
+
+
     private Long getUserIdFromToken(HttpServletRequest request) {
         String token = Arrays.stream(request.getCookies())
                 .filter(cookie -> "token".equals(cookie.getName()))
@@ -176,50 +217,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .getId();
     }
 
-    @Override
-    @Transactional
-    public ResponseEntity<?> deleteUser(Long userId, HttpServletResponse response) {
-        try {
-            // Récupérer l'utilisateur à supprimer
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-
-            // Trouver l'utilisateur "deletedUser"
-            User deletedUser = userRepository.findByUsername("deletedUser");
-
-            // Transférer toutes les cartes inactives à "deletedUser"
-            List<UserCard> inactiveUserCards = user.getUserCards().stream()
-                    .filter(userCard -> !userCard.getIsActive())
-                    .collect(Collectors.toList());
-
-            for (UserCard userCard : inactiveUserCards) {
-                userCard.setUser(deletedUser);
-            }
-
-            // Sauvegarder les cartes mises à jour
-            userCardRepository.saveAll(inactiveUserCards);
-
-            // Synchroniser l'état persistant avec la base de données
-            userCardRepository.flush();
-
-            // Supprimer l'utilisateur d'origine
-            userRepository.delete(user);
-
-            // Supprimer le cookie JWT
-            jwtTokenService.deleteCookie(response, "token");
-
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("An error occurred while deleting the user: " + e.getMessage());
-        }
-    }
-
-
     private boolean isAuthorized(HttpServletRequest request, Long id) {
         return !getUserIdFromToken(request).equals(id);
     }
-
 }
-
-
-

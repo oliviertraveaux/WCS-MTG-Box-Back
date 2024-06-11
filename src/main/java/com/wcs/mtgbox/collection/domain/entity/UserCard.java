@@ -40,7 +40,7 @@ public class UserCard {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "userCards")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userCards")
     private List<Offer> offers;
 
 }
