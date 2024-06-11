@@ -63,7 +63,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<UserCard> userCards;
 
     @ManyToOne(fetch = FetchType.EAGER)
