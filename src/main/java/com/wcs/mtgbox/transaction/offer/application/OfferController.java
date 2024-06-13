@@ -5,9 +5,12 @@ import com.wcs.mtgbox.collection.infrastructure.exception.UserCardNotFoundErrorE
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.exception.OfferNotFoundErrorException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Offer management", description = "API to handle user offers for cards")
 @RestController
 @RequestMapping("/api/v1/offer")
 public class OfferController {
@@ -24,6 +27,9 @@ public class OfferController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Create new offer", description = "Allows a user to create a new offer for a card")
+
+
     ResponseEntity<?> readOneOffer(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(offerService.getOfferById(id));
@@ -33,6 +39,8 @@ public class OfferController {
     }
 
     @GetMapping("/card-ad/{id}")
+    @Operation(summary = "Get offer by ID", description = "Retrieves the details of an offer using its ID")
+
     ResponseEntity<?> readOffersByUserCardId(@PathVariable Long id){
         try {
             return ResponseEntity.ok(offerService.getOffersByUserCardId(id));
@@ -41,6 +49,8 @@ public class OfferController {
         }
     }
     @GetMapping("/user/{id}")
+    @Operation(summary = "Get offers by user  ID", description = "Retrieves all the offers made for a specific user  using its ID")
+
     ResponseEntity<?> readOffersByUserId(@PathVariable Long id){
         try {
             return ResponseEntity.ok(offerService.getOffersByUserId(id));
@@ -50,6 +60,8 @@ public class OfferController {
     }
 
     @GetMapping("/received/user/{id}")
+    @Operation(summary = "Get offers  received by user ID", description = "Retrieves all the offers received  for a specific user using its ID")
+
     ResponseEntity<?> readOffersReceivedByUserId(@PathVariable Long id){
         try {
             return ResponseEntity.ok(offerService.getOffersReceivedByUserId(id));
