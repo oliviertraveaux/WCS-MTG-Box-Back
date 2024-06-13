@@ -9,38 +9,48 @@ import com.wcs.mtgbox.auth.domain.service.auth.impl.UserMapper;
 import com.wcs.mtgbox.auth.domain.service.userInfo.UserInfoService;
 import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
+import com.wcs.mtgbox.collection.domain.entity.UserCard;
+import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
+
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenService jwtTokenService;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserCardRepository userCardRepository;
+
 
     public UserInfoServiceImpl(
             UserRepository userRepository,
             UserMapper userMapper,
             BCryptPasswordEncoder passwordEncoder,
             JwtTokenService jwtTokenService,
-            UserDetailsServiceImpl userDetailsService
+            UserDetailsServiceImpl userDetailsService,
+            UserCardRepository userCardRepository
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenService = jwtTokenService;
         this.userDetailsService = userDetailsService;
+        this.userCardRepository = userCardRepository;
     }
 
     @Override
@@ -149,6 +159,54 @@ public class UserInfoServiceImpl implements UserInfoService {
             return ResponseEntity.status(500).body("An unexpected error occurred.");
         }
     }
+
+
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteUser(Long userId, HttpServletResponse response, HttpServletRequest request) {
+        try {
+            // check si l'id correspond au token
+            Long tokenUserId = getUserIdFromToken(request);
+            if (!tokenUserId.equals(userId)) {
+                return ResponseEntity.status(403).body("You are not allowed to delete this user.");
+            }
+
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // select username = deletedUser => doit etre présent en BDD
+            User deletedUser = userRepository.findByUsername("deletedUser");
+            if (deletedUser == null) {
+                throw new RuntimeException("Deleted user entity not found");
+            }
+
+            List<UserCard> inactiveUserCards = user.getUserCards().stream()
+                    .filter(userCard -> !userCard.getIsActive())
+                    .collect(Collectors.toList());
+
+            for (UserCard userCard : inactiveUserCards) {
+                userCard.setUser(deletedUser);
+            }
+            userCardRepository.saveAll(inactiveUserCards);
+
+            // Remove active uscards active = true
+            List<UserCard> activeUserCards = user.getUserCards().stream()
+                    .filter(UserCard::getIsActive)
+                    .collect(Collectors.toList());
+
+            userCardRepository.deleteAll(activeUserCards);
+
+            userRepository.delete(user);
+
+            jwtTokenService.deleteCookie(response, "token");
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while deleting the user: " + e.getMessage());
+        }
+    }
+
 
     private Long getUserIdFromToken(HttpServletRequest request) {
         String token = Arrays.stream(request.getCookies())

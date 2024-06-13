@@ -4,6 +4,7 @@ import com.wcs.mtgbox.auth.domain.dto.UpdateUserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 
 public interface UserInfoService {
@@ -13,4 +14,8 @@ public interface UserInfoService {
     ResponseEntity<?> updatePassword(Long id, String newPassword, HttpServletRequest request);
     ResponseEntity<?> updateUser(Long id, UpdateUserDTO updateUserRequest, HttpServletRequest request);
     ResponseEntity<?> verifyPassword(Long id, String password, HttpServletRequest request);
+    ResponseEntity<?> deleteUser(Long userId, HttpServletResponse response, HttpServletRequest request);
+
+
 }
+

@@ -33,6 +33,7 @@ public class SecurityConfig {
             "/api/v1/marketcards",
             "/api/v1/marketcards/**",
             "/api/v1/card-ad/**",
+            "/api/v1/verify-token",
 
     };
 
@@ -56,7 +57,6 @@ public class SecurityConfig {
                                 "/api/v1/upload/**",
                                 "api/v1/logout",
                                 "/files",
-                                "/api/v1/verify-token",
                                 "/api/v1/offer/",
                                 "/api/v1/offer/**"
                         ).authenticated()

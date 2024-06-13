@@ -45,4 +45,9 @@ public class UserController {
     public ResponseEntity<?> verifyPassword(@PathVariable Long id, @RequestBody String password, HttpServletRequest request) {
         return userInfoService.verifyPassword(id, password, request);
     }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) {
+        return userInfoService.deleteUser(id, response,request);
+    }
 }
