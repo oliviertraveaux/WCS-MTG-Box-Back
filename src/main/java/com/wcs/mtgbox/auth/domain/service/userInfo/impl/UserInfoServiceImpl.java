@@ -128,8 +128,8 @@ public class UserInfoServiceImpl implements UserInfoService {
                 user.setCity(updateUserRequest.getCity());
                 isUpdated = true;
             }
-            if (UpdateUserDTO.getActive() != null) {
-                user.setIsActive(UpdateUserDTO.getActive());
+            if (updateUserRequest.getIsActive() != null) {
+                user.setIsActive(updateUserRequest.getIsActive());
                 isUpdated = true;
             }
 
