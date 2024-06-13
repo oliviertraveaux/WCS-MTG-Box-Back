@@ -65,7 +65,7 @@ public class CollectionCardServiceImpl implements CollectionCardService {
 
             UserCard userCard = this.saveUserCard(cardInfo,card);
 
-            CollectionCardDto collectionCard = cardMapper.cardAndUserCardEntityToCollectionCardDtoTo(cardInfo, userCard);
+            CollectionCardDto collectionCard = cardMapper.userCardEntityToCollectionCardDto(userCard);
 
             newCollectionCards.add(collectionCard);
         });
@@ -90,14 +90,13 @@ public class CollectionCardServiceImpl implements CollectionCardService {
 
     @Override
     public List<CollectionCardDto> getCollectionCardsByUserId(Long userId) {
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(UserNotFoundErrorException::new);
         List<UserCard> userCards = userCardRepository.findAllByUserId(userId);
         List<CollectionCardDto> collectionCards = new ArrayList<>();
 
         for (UserCard userCard : userCards) {
-            Card card = userCard.getCard();
-            CollectionCardDto dto = cardMapper.cardAndUserCardEntityToCollectionCardDtoTo(card, userCard);
+            CollectionCardDto dto = cardMapper.userCardEntityToCollectionCardDto(userCard);
             collectionCards.add(dto);
         }
 

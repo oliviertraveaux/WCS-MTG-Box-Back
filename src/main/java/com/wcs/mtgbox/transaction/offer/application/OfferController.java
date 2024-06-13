@@ -40,4 +40,21 @@ public class OfferController {
             throw new UserCardNotFoundErrorException(id);
         }
     }
+    @GetMapping("/user/{id}")
+    ResponseEntity<?> readOffersByUserId(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(offerService.getOffersByUserId(id));
+        } catch (Exception e){
+            throw new UserCardNotFoundErrorException(id);
+        }
+    }
+
+    @GetMapping("/received/user/{id}")
+    ResponseEntity<?> readOffersReceivedByUserId(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(offerService.getOffersReceivedByUserId(id));
+        } catch (Exception e){
+            throw new UserCardNotFoundErrorException(id);
+        }
+    }
 }
