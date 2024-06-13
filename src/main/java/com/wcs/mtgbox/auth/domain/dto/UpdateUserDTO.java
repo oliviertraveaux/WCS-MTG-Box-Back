@@ -9,10 +9,7 @@ public class UpdateUserDTO {
     private String email;
     private Integer department;
     private String city;
-    private static Boolean isActive;
+    private Boolean isActive;
 
-    public static Boolean getActive() {
-        return isActive;
-    }
 
 }
