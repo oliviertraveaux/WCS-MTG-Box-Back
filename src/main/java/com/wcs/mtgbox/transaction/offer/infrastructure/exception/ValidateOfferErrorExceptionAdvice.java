@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-
-public class OfferNotFoundErrorExceptionAdvice {
-    @ExceptionHandler(OfferNotFoundErrorException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String errorGetOfferHandler(OfferNotFoundErrorException ex) { return ex.getMessage(); }
+public class ValidateOfferErrorExceptionAdvice {
+    @ExceptionHandler(ValidateOfferErrorException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    String errorValidateOfferHandler(ValidateOfferErrorException ex) { return ex.getMessage(); }
 }

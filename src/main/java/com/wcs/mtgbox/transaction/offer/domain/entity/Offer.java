@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class Offer {
     @Column(name = "created_date",  nullable = false)
     private LocalDateTime createdDate;
 
+    @LastModifiedDate
     @Column(name = "accepted_date")
     private LocalDateTime acceptedDate;
 

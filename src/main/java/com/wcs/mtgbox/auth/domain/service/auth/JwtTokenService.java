@@ -30,5 +30,5 @@ public interface JwtTokenService {
 
     void reloadJwtCookie(HttpServletResponse response, UserDetails userDetails);
 
-
+    Long getUserIdFromToken(HttpServletRequest request);
 }
