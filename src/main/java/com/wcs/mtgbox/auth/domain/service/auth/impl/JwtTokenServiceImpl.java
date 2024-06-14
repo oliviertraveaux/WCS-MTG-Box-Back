@@ -4,6 +4,7 @@ import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.entity.Token;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
+import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -166,5 +167,22 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         Token newToken = generateToken(userDetails);
         ResponseCookie jwtCookie = createJwtCookie(newToken.getToken());
         response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+    }
+
+    @Override
+    public Long getUserIdFromToken(HttpServletRequest request) {
+        String token = Arrays.stream(request.getCookies())
+                .filter(cookie -> "token".equals(cookie.getName()))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+
+        if (token == null) {
+            throw new UserNotFoundErrorException("Token not found");
+        }
+
+        String username = getUsernameFromToken(token);
+        return userRepository.findByUsername(username)
+                .getId();
     }
 }

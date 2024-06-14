@@ -61,7 +61,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public ResponseEntity<?> readOne(Long id, HttpServletRequest request) {
-        if (isAuthorized(request, id)) {
+        if (!isAuthorized(request, id)) {
             return ResponseEntity.status(403).body("You are not authorized to view this user.");
         }
         try {
@@ -74,7 +74,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public ResponseEntity<?> updateUsername(Long id, String newUsername, HttpServletRequest request, HttpServletResponse response) {
-        if (isAuthorized(request, id)) {
+        if (!isAuthorized(request, id)) {
             return ResponseEntity.status(403).body("You are not authorized to update this user.");
         }
         try {
@@ -94,7 +94,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public ResponseEntity<?> updatePassword(Long id, String newPassword, HttpServletRequest request) {
-        if (isAuthorized(request, id)) {
+        if (!isAuthorized(request, id)) {
             return ResponseEntity.status(403).body("You are not authorized to update this user.");
         }
         try {
@@ -109,7 +109,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public ResponseEntity<?> updateUser(Long id, UpdateUserDTO updateUserRequest, HttpServletRequest request) {
-        if (isAuthorized(request, id)) {
+        if (!isAuthorized(request, id)) {
             return ResponseEntity.status(403).body("You are not authorized to update this user.");
         }
         try {
@@ -146,7 +146,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public ResponseEntity<?> verifyPassword(Long id, String password, HttpServletRequest request) {
-        if (isAuthorized(request, id)) {
+        if (!isAuthorized(request, id)) {
             return ResponseEntity.status(403).body("You are not authorized to verify this user.");
         }
         try {
@@ -166,10 +166,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Transactional
     public ResponseEntity<?> deleteUser(Long userId, HttpServletResponse response, HttpServletRequest request) {
         try {
-            // check si l'id correspond au token
-            Long tokenUserId = getUserIdFromToken(request);
-            if (!tokenUserId.equals(userId)) {
-                return ResponseEntity.status(403).body("You are not allowed to delete this user.");
+            if (!isAuthorized(request, userId)) {
+                return ResponseEntity.status(403).body("You are not authorized to delete this user.");
             }
 
             User user = userRepository.findById(userId)
@@ -207,24 +205,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
     }
 
-
-    private Long getUserIdFromToken(HttpServletRequest request) {
-        String token = Arrays.stream(request.getCookies())
-                .filter(cookie -> "token".equals(cookie.getName()))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null);
-
-        if (token == null) {
-            throw new UserNotFoundErrorException("Token not found");
-        }
-
-        String username = jwtTokenService.getUsernameFromToken(token);
-        return userRepository.findByUsername(username)
-                .getId();
-    }
-
     private boolean isAuthorized(HttpServletRequest request, Long id) {
-        return !getUserIdFromToken(request).equals(id);
+        return jwtTokenService.getUserIdFromToken(request).equals(id);
     }
 }

@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-
-public class OfferNotFoundErrorExceptionAdvice {
-    @ExceptionHandler(OfferNotFoundErrorException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String errorGetOfferHandler(OfferNotFoundErrorException ex) { return ex.getMessage(); }
+public class DeleteOfferNotAuthorizedErrorExceptionAdvice {
+    @ExceptionHandler(DeleteOfferNotAuthorizedErrorException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    String errorModifyOfferHandler(DeleteOfferNotAuthorizedErrorException ex) { return ex.getMessage(); }
 }
