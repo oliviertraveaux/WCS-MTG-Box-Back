@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.transaction.offer.domain.service.impl;
 
+import com.mailjet.client.errors.MailjetException;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
 import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
@@ -12,6 +13,7 @@ import com.wcs.mtgbox.transaction.offer.domain.dto.OfferDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferFullWantedCardDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferStatusEnum;
 import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
+import com.wcs.mtgbox.transaction.offer.domain.service.OfferEmailService;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.OfferRepository;
 import com.wcs.mtgbox.transaction.offer.infrastructure.exception.DeleteOfferNotAuthorizedErrorException;
@@ -35,15 +37,22 @@ public class OfferServiceImpl implements OfferService {
     private final UserCardRepository userCardRepository;
     private final OfferMapper offerMapper;
     private final JwtTokenService jwtTokenService;
+    private final OfferEmailService offerEmailService;
 
 
-    public OfferServiceImpl(OfferRepository offerRepository, UserRepository userRepository, UserCardRepository userCardRepository, OfferMapper offerMapper, JwtTokenService jwtTokenService
+    public OfferServiceImpl(OfferRepository offerRepository,
+                            UserRepository userRepository,
+                            UserCardRepository userCardRepository,
+                            OfferMapper offerMapper,
+                            JwtTokenService jwtTokenService,
+                            OfferEmailService offerEmailService
     ) {
         this.offerRepository = offerRepository;
         this.userRepository = userRepository;
         this.userCardRepository = userCardRepository;
         this.offerMapper = offerMapper;
         this.jwtTokenService = jwtTokenService;
+        this.offerEmailService = offerEmailService;
     }
 
     @Override
@@ -107,6 +116,7 @@ public class OfferServiceImpl implements OfferService {
         }
         offer.setStatus(offerStatus);
         offer.setAcceptedDate(LocalDateTime.now());
+
         return offerMapper.offerEntityToOfferDto(offerRepository.save(offer));
     }
 
@@ -138,6 +148,8 @@ public class OfferServiceImpl implements OfferService {
             UserCard wantedUserCardToChange = userCardRepository.findById(offer.getWantedUserCard().getId()).orElseThrow(UserCardNotFoundErrorException::new);
             wantedUserCardToChange.setIsActive(false);
             userCardRepository.save(wantedUserCardToChange);
+
+            offerEmailService.sendOfferEmail(offer);
 
             return offerMapper.offerEntityToOfferDto(offer);
         } catch (Exception e) {
