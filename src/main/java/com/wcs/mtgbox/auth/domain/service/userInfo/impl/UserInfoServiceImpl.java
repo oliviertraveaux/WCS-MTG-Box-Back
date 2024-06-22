@@ -1,7 +1,7 @@
 package com.wcs.mtgbox.auth.domain.service.userInfo.impl;
 
-import com.wcs.mtgbox.auth.domain.dto.UpdateUserDTO;
-import com.wcs.mtgbox.auth.domain.dto.UserDTO;
+import com.wcs.mtgbox.auth.domain.dto.*;
+import com.wcs.mtgbox.auth.domain.entity.Role;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
 import com.wcs.mtgbox.auth.domain.service.auth.impl.UserDetailsServiceImpl;
@@ -11,7 +11,6 @@ import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorExcept
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -20,14 +19,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
-
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -204,8 +201,38 @@ public class UserInfoServiceImpl implements UserInfoService {
             return ResponseEntity.status(500).body("An error occurred while deleting the user: " + e.getMessage());
         }
     }
-
     private boolean isAuthorized(HttpServletRequest request, Long id) {
         return jwtTokenService.getUserIdFromToken(request).equals(id);
+    }
+
+    @Override
+    public UserDTO administrateUser(Long id, UpdateUserByAdminDTO request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundErrorException(id));
+
+        boolean dataChanged = false;
+
+        if (request.getIsBanned() != null && !request.getIsBanned().equals(user.getIsBanned())) {
+            user.setIsBanned(request.getIsBanned());
+            dataChanged = true;
+        }
+
+        if (request.getRole() != null && !request.getRole().equals(user.getRole().getType())) {
+            Long roleId = request.getRole().equals(RoleEnum.USER) ? 1L : 2L;
+            user.setRole(new Role(roleId, request.getRole()));
+            dataChanged = true;
+        }
+
+        if (dataChanged) {
+            userRepository.save(user);
+        }
+
+        return userMapper.transformUserEntityInUserDto(Optional.of(user));
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> userMapper.transformUserEntityInUserDto(Optional.of(user)))
+                .toList();
     }
 }

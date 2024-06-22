@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.application;
 
+import com.wcs.mtgbox.auth.domain.dto.RoleEnum;
 import com.wcs.mtgbox.auth.domain.service.auth.impl.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +42,6 @@ public class SecurityConfig {
             "/api/v1/verify-token",
             "/swagger-ui/**",
             "/v3/api-docs/**"
-
     };
 
     @Bean
@@ -49,8 +52,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
+                .authorizeHttpRequests(requests -> requests
                         .requestMatchers(WHITE_LIST_URL).permitAll()
+                        .requestMatchers(GET,
+                                "/api/v1/users/administrate").hasRole(RoleEnum.ADMIN.name())
+                        .requestMatchers(PUT,
+                        "/api/v1/users/administrate/**").hasRole(RoleEnum.ADMIN.name())
                         .requestMatchers(
                                 "/api/v1/users/**",
                                 "/api/v1/apicards",
@@ -65,11 +72,13 @@ public class SecurityConfig {
                                 "/api/v1/offer/**"
                         ).authenticated()
                 )
-                .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
                         .ignoringRequestMatchers("/api/v1/register",
                                 "/api/v1/login",
                                 "/api/v1/register",
                                 "/api/v1/users/**",
+                                "/api/v1/users/administrate",
+                                "/api/v1/users/administrate/**",
                                 "/api/v1/apicards/**",
                                 "/api/v1/collection-cards/**",
                                 "/api/v1/upload/**",

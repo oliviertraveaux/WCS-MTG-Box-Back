@@ -1,6 +1,6 @@
 package com.wcs.mtgbox.auth.application;
 
-import com.wcs.mtgbox.auth.domain.dto.UpdateUserDTO;
+import com.wcs.mtgbox.auth.domain.dto.*;
 import com.wcs.mtgbox.auth.domain.service.userInfo.UserInfoService;
 import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Tag(name = "User management", description = "API to manage users")
@@ -65,5 +67,20 @@ public class UserController {
 
     public ResponseEntity<?> deleteUser(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) {
         return userInfoService.deleteUser(id, response,request);
+    }
+
+    @GetMapping("/administrate")
+    @Operation(summary = "Administrate users", description = "Get list of all users")
+    public List<UserDTO> getAllUsers() {
+        return userInfoService.getAllUsers();
+    }
+
+    @PutMapping("/administrate/{id}")
+    @Operation(summary = "Administrate user", description = "Administrate a user based on its ID")
+
+    public UserDTO administrateUser(@PathVariable Long id, @RequestBody UpdateUserByAdminRequestDTO requestBody) {
+        RoleEnum role = RoleEnum.translateStringToRole(requestBody.getRole());
+        UpdateUserByAdminDTO request = new UpdateUserByAdminDTO(requestBody.getIsBanned(), role);
+        return userInfoService.administrateUser(id, request);
     }
 }

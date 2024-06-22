@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.domain.service.auth.impl;
 
+import com.wcs.mtgbox.auth.domain.dto.RoleEnum;
 import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.Role;
@@ -7,6 +8,7 @@ import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -19,7 +21,8 @@ public class UserMapper {
         user.setUsername(userDTO.getUsername());
         user.setDepartment(userDTO.getDepartment());
         user.setCity(userDTO.getCity());
-        user.setRole(new Role(1L, "USER"));
+        user.setLastConnectionDate(LocalDateTime.now());
+        user.setRole(new Role(1L, RoleEnum.USER));
         user.setIsActive(true);
         user.setIsBanned(false);
         user.setPassword(userDTO.getPassword());

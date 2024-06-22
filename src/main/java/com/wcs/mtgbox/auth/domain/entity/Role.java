@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.auth.domain.entity;
 
+import com.wcs.mtgbox.auth.domain.dto.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,8 @@ public class Role {
     private Long id;
 
     @Column(name = "type", nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum type;
 
     public Role() {
     }
