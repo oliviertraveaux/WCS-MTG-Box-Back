@@ -26,7 +26,7 @@ public class EmailService implements EmailServiceInterface {
 
 
     @Override
-    public void SendMail(String toEmail, String body) throws MailjetException {
+    public void SendMail(String toEmail,String userName, String body) throws MailjetException {
         ClientOptions options = ClientOptions.builder()
                 .apiKey(apiKey)
                 .apiSecretKey(apiSecret)
@@ -35,7 +35,7 @@ public class EmailService implements EmailServiceInterface {
         MailjetClient client = new MailjetClient(options);
 
         String htmlContent = "<div style='font-family: Arial, sans-serif; text-align: center; color: #333;'>" +
-                "<img src='https://boutique.magiccorporation.com/scan.php?num=519' alt='Magic Card Image' style='width: 250px; height: 350px; margin-bottom: 20px;'>" +
+                "<img src='https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=3910&type=card' alt='Magic Card Image' style='width: 250px; height: 350px; margin-bottom: 20px;'>" +
                 "<h1 style='color: #5a5a5a;'>Mot de passe oublié?</h1>" +
                 "<p>Bonjour, il semble que vous ayez demandé à réinitialiser votre mot de passe.</p>" +
                 "<p style='padding: 15px; background-color: #f8f8f8; border: 1px solid #eaeaea;'>" + body + "</p>" +
@@ -43,7 +43,7 @@ public class EmailService implements EmailServiceInterface {
 
         TransactionalEmail message1 = TransactionalEmail
                 .builder()
-                .to(new SendContact(toEmail, "stanislav"))
+                .to(new SendContact(toEmail, userName))
                 .from(new SendContact(mailJetUserEmail, "MTG Box mot de passe oublié"))
                 .htmlPart(htmlContent)
                 .subject("Mot de passe oublié")

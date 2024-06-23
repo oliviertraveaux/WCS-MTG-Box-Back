@@ -61,7 +61,7 @@ public class PasswordForgottenService implements PasswordForgottenServiceInterfa
 
     @Override
     public void mailSender(User user, String token) throws MailjetException {
-        emailService.SendMail(user.getEmail(), "Pour créer un nouveau mot de passe, veuillez accéder à cette adresse " + urlMailToken + token);
+        emailService.SendMail(user.getEmail(), user.getUsername(), "Pour créer un nouveau mot de passe, veuillez accéder à cette adresse " + urlMailToken + token);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferStatusDto;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.exception.OfferNotFoundErrorException;
+import com.wcs.mtgbox.transaction.offer.infrastructure.exception.UpdateOfferNotAuthorizedErrorException;
 import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -77,7 +78,7 @@ public class OfferController {
     @PutMapping("/accept-offer/{id}")
     @Operation(summary = "Modify offer received by ID", description = "Modify the offer status to ACCEPTED by using its ID")
     public ResponseEntity<?> acceptOffer(@PathVariable Long id, @RequestBody OfferStatusDto status, HttpServletRequest request)  {
-            return ResponseEntity.ok(offerService.acceptOffer(id, status.getStatus(), request));
+        return ResponseEntity.ok(offerService.acceptOffer(id, status.getStatus(), request));
     }
 
     @PutMapping("/validate-offer/{id}")

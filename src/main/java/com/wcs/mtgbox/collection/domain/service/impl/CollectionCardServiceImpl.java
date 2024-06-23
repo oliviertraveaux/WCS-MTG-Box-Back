@@ -92,7 +92,9 @@ public class CollectionCardServiceImpl implements CollectionCardService {
     public List<CollectionCardDto> getCollectionCardsByUserId(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(UserNotFoundErrorException::new);
-        List<UserCard> userCards = userCardRepository.findAllByUserId(userId);
+        List<UserCard> userCards = userCardRepository.findAllByUserId(userId).stream()
+                .filter(UserCard::getIsActive)
+                .toList();
         List<CollectionCardDto> collectionCards = new ArrayList<>();
 
         for (UserCard userCard : userCards) {

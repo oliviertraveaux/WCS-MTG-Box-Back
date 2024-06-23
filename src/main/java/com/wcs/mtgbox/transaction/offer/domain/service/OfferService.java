@@ -1,5 +1,6 @@
 package com.wcs.mtgbox.transaction.offer.domain.service;
 
+import com.mailjet.client.errors.MailjetException;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferFullWantedCardDto;
