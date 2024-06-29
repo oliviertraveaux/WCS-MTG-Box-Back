@@ -10,6 +10,4 @@ public class UpdateUserDTO {
     private Integer department;
     private String city;
     private Boolean isActive;
-
-
 }

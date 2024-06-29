@@ -153,6 +153,8 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 throw new Exception("User not found");
             }
             user.setLastConnectionDate(LocalDateTime.now());
+            userRepository.save(user);
+            System.out.println("User last connection date updated");
 
             UserDTO userDTO = userMapper.transformUserEntityInUserDto(Optional.of(user));
             return ResponseEntity.ok().body(userDTO);

@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.auth.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wcs.mtgbox.auth.domain.dto.RoleEnum;
 import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.Role;
@@ -80,7 +81,7 @@ AuthControllerTest {
     public void TestRegisterShouldSuccess() throws Exception {
         UserRegistrationDTO user = new UserRegistrationDTO("Jack", "jack@gmail.com", "password123", 75000, "Paris");
         UserDTO userResponse = new UserDTO(10L, "jack", "jack@gmail.com", true, false, 33000, "Bordeaux", LocalDateTime.now(),
-                LocalDateTime.now(), new Role(1L, "USER"));
+                LocalDateTime.now(), new Role(1L, RoleEnum.USER));
         ObjectMapper mapper = new ObjectMapper();
 
 

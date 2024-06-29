@@ -3,7 +3,6 @@ package com.wcs.mtgbox.auth.domain.dto;
 import com.wcs.mtgbox.auth.domain.entity.Role;
 import com.wcs.mtgbox.files.domain.entity.Media;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;

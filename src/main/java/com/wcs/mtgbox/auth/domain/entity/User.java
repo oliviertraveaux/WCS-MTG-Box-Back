@@ -50,7 +50,6 @@ public class User {
     @Column(name = "city", nullable = false)
     private String city;
 
-    @LastModifiedDate
     @Column(name = "last_connection_date", nullable = false)
     private LocalDateTime lastConnectionDate;
 
