@@ -2,6 +2,7 @@ package com.wcs.mtgbox.transaction.offer.domain.service.impl;
 
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.collection.domain.dto.CollectionCardDto;
+import com.wcs.mtgbox.collection.domain.dto.OfferWantedCardDto;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.domain.service.impl.CardMapper;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
@@ -61,7 +62,7 @@ public class OfferMapper {
     }
 
     OfferFullWantedCardDto offerEntityToOfferReceivedDto(Offer offer) {
-        CollectionCardDto wantedUserCard = cardMapper.userCardEntityToCollectionCardDto(offer.getWantedUserCard());
+        OfferWantedCardDto wantedUserCard = cardMapper.userCardEntityToOfferWantedCardDto(offer.getWantedUserCard());
 
         OfferFullWantedCardDto offerReceivedDto = new OfferFullWantedCardDto();
         offerReceivedDto.setId(offer.getId());

@@ -8,6 +8,7 @@ import com.wcs.mtgbox.collection.domain.entity.CardQuality;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.domain.model.CardBasicInfoWithId;
 import com.wcs.mtgbox.collection.domain.model.CardUserInfo;
+import com.wcs.mtgbox.collection.domain.model.OfferWantedCardUserInfo;
 import com.wcs.mtgbox.collection.infrastructure.exception.UserCardNotFoundErrorException;
 import org.springframework.stereotype.Service;
 
@@ -130,5 +131,33 @@ public class CardMapper {
                 }
         );
         return cardAdDto;
+    }
+
+    public OfferWantedCardDto userCardEntityToOfferWantedCardDto(UserCard userCard) {
+        OfferWantedCardDto cardDto = new OfferWantedCardDto(new CardBasicInfoWithId(), new OfferWantedCardUserInfo());
+        Card cardInfo = userCard.getCard();
+
+        cardDto.getCardInfo().setUniqueId(cardInfo.getId());
+        cardDto.getCardInfo().setApiCardId(cardInfo.getApiCardId());
+        cardDto.getCardInfo().setName(cardInfo.getName());
+        cardDto.getCardInfo().setImageUrl(cardInfo.getImageUrl());
+        cardDto.getCardInfo().setFrenchName(cardInfo.getFrenchName());
+        cardDto.getCardInfo().setFrenchImageUrl(cardInfo.getFrenchImageUrl());
+        cardDto.getCardInfo().setManaCost(cardInfo.getManaCost());
+        cardDto.getCardInfo().setRarity(cardInfo.getRarity());
+        cardDto.getCardInfo().setSetAbbreviation(cardInfo.getSetAbbreviation());
+        cardDto.getCardInfo().setSetName(cardInfo.getSetName());
+        cardDto.getCardInfo().setText(cardInfo.getText());
+        cardDto.getCardInfo().setArtist(cardInfo.getArtist());
+
+        cardDto.getUserInfo().setUserCardId(userCard.getId());
+        cardDto.getUserInfo().setUserId(userCard.getUser().getId());
+        cardDto.getUserInfo().setUserName(userCard.getUser().getUsername());
+        cardDto.getUserInfo().setCity(userCard.getUser().getCity());
+        cardDto.getUserInfo().setDepartment(userCard.getUser().getDepartment());
+        cardDto.getUserInfo().setQualityName(userCard.getCardQuality().getName());
+        cardDto.getUserInfo().setLanguageName(userCard.getCardLanguage().getName());
+
+        return cardDto;
     }
 }

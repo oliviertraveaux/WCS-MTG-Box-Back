@@ -1,6 +1,5 @@
 package com.wcs.mtgbox.transaction.offer.domain.service;
 
-import com.mailjet.client.errors.MailjetException;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferFullWantedCardDto;
@@ -14,7 +13,7 @@ public interface OfferService {
     OfferCreationDto saveOffer(OfferCreationDto offer);
     OfferDto getOfferById(Long offerId);
     List<OfferDto> getOffersByUserCardId(Long userCardId);
-    List<OfferFullWantedCardDto> getOffersByUserId(Long userId);
+    List<OfferFullWantedCardDto> getOffersMadeByUserId(Long userId);
     List<OfferFullWantedCardDto> getOffersReceivedByUserId(Long userId);
     void deleteOffer(Long offerId, HttpServletRequest request);
     OfferDto acceptOffer(Long offerId, String offerStatus, HttpServletRequest request);

@@ -6,7 +6,6 @@ import com.wcs.mtgbox.transaction.offer.domain.dto.OfferCreationDto;
 import com.wcs.mtgbox.transaction.offer.domain.dto.OfferStatusDto;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.exception.OfferNotFoundErrorException;
-import com.wcs.mtgbox.transaction.offer.infrastructure.exception.UpdateOfferNotAuthorizedErrorException;
 import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,7 +51,7 @@ public class OfferController {
     @Operation(summary = "Get offers by user  ID", description = "Retrieves all the offers made for a specific user  using its ID")
     ResponseEntity<?> readOffersByUserId(@PathVariable Long id){
         try {
-            return ResponseEntity.ok(offerService.getOffersByUserId(id));
+            return ResponseEntity.ok(offerService.getOffersMadeByUserId(id));
         } catch (Exception e){
             throw new UserCardNotFoundErrorException(id);
         }
