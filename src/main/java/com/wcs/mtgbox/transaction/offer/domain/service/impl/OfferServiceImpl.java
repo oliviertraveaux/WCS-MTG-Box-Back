@@ -1,6 +1,5 @@
 package com.wcs.mtgbox.transaction.offer.domain.service.impl;
 
-import com.mailjet.client.errors.MailjetException;
 import com.wcs.mtgbox.auth.domain.entity.User;
 import com.wcs.mtgbox.auth.domain.service.auth.JwtTokenService;
 import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorException;
@@ -22,7 +21,6 @@ import com.wcs.mtgbox.transaction.offer.infrastructure.exception.UpdateOfferNotA
 import com.wcs.mtgbox.transaction.offer.infrastructure.exception.ValidateOfferErrorException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -83,10 +81,11 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public List<OfferFullWantedCardDto> getOffersByUserId(Long userId) {
+    public List<OfferFullWantedCardDto> getOffersMadeByUserId(Long userId) {
         List<Offer> offers = offerRepository.findAllByUser_Id(userId);
         return offers.stream()
-                .map(offer -> offerMapper.offerEntityToOfferReceivedDto(offer)).toList();
+                .filter(offer -> !offer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
+                .map(offerMapper::offerEntityToOfferReceivedDto).toList();
     }
 
 
@@ -95,7 +94,8 @@ public class OfferServiceImpl implements OfferService {
         userRepository.findById(userId).orElseThrow(UserNotFoundErrorException::new);
             List<Offer> offers = offerRepository.findAllByWantedUserCard_User_Id(userId);
             return offers.stream()
-                    .map(offer -> offerMapper.offerEntityToOfferReceivedDto(offer)).toList();
+                    .filter(offer -> !offer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
+                    .map(offerMapper::offerEntityToOfferReceivedDto).toList();
         }
 
     @Override

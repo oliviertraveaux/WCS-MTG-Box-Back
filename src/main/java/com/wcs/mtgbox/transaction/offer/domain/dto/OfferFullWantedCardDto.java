@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.transaction.offer.domain.dto;
 
 import com.wcs.mtgbox.collection.domain.dto.CollectionCardDto;
+import com.wcs.mtgbox.collection.domain.dto.OfferWantedCardDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OfferFullWantedCardDto {
     private Long id;
-    private CollectionCardDto wantedUserCard;
+    private OfferWantedCardDto wantedUserCard;
     private Long userId;
     private String userName;
     private String city;
