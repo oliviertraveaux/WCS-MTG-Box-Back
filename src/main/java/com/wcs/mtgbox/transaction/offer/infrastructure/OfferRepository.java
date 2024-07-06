@@ -9,5 +9,5 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
     List<Offer> findAllByWantedUserCard_Id(Long userCardId);
     List<Offer> findAllByUser_Id(Long userId);
     List<Offer> findAllByWantedUserCard_User_Id(Long userId);
-
+    List<Offer> findAllByUser_IdOrWantedUserCard_User_Id(Long userId, Long wantedUserCardUserId);
 }

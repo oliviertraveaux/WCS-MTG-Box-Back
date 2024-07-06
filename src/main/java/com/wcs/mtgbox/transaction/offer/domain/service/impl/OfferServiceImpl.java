@@ -99,6 +99,15 @@ public class OfferServiceImpl implements OfferService {
         }
 
     @Override
+    public List<OfferFullWantedCardDto> getOffersHistoryByUserId(Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundErrorException::new);
+        List<Offer> offers = offerRepository.findAllByUser_IdOrWantedUserCard_User_Id(userId, userId);
+        return offers.stream()
+                .filter(offer -> offer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
+                .map(offerMapper::offerEntityToOfferReceivedDto).toList();
+    }
+
+    @Override
     public void deleteOffer(Long offerId, HttpServletRequest request){
         Offer offer = offerRepository.findById(offerId).orElseThrow(OfferNotFoundErrorException::new);
         if (!isAuthorizedToDelete(request, offer.getUser().getId())
