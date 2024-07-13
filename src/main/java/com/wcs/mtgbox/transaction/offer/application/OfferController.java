@@ -58,10 +58,20 @@ public class OfferController {
     }
 
     @GetMapping("/received/user/{id}")
-    @Operation(summary = "Get offers  received by user ID", description = "Retrieves all the offers received  for a specific user using its ID")
-    ResponseEntity<?> readOffersReceivedByUserId(@PathVariable Long id){
+    @Operation(summary = "Get offers history by user ID", description = "Retrieves all the offers received for a specific user using its ID")
+    ResponseEntity<?> readOffersHistoryByUserId(@PathVariable Long id){
         try {
             return ResponseEntity.ok(offerService.getOffersReceivedByUserId(id));
+        } catch (Exception e){
+            throw new UserCardNotFoundErrorException(id);
+        }
+    }
+
+    @GetMapping("/history/user/{id}")
+    @Operation(summary = "Get offers  received by user ID", description = "Retrieves all the offers validated for a specific user using its ID")
+    ResponseEntity<?> readOffersReceivedByUserId(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(offerService.getOffersHistoryByUserId(id));
         } catch (Exception e){
             throw new UserCardNotFoundErrorException(id);
         }
