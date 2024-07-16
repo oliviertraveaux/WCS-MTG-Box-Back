@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OfferRepository extends JpaRepository<Offer, Long> {
     List<Offer> findAllByWantedUserCard_Id(Long userCardId);
-    List<Offer> findAllByUser_Id(Long userId);
-    List<Offer> findAllByWantedUserCard_User_Id(Long userId);
-    List<Offer> findAllByUser_IdOrWantedUserCard_User_Id(Long userId, Long wantedUserCardUserId);
+    List<Offer> findAllByUser_IdOrderByLastModificationDateDesc(Long userId);
+    List<Offer> findAllByWantedUserCard_User_IdOrderByCreatedDateDesc(Long userId);
+    List<Offer> findAllByUser_IdOrWantedUserCard_User_IdOrderByLastModificationDateDesc(Long userId, Long wantedUserCardUserId);
 }
