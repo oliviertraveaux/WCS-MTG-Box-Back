@@ -15,10 +15,7 @@ import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferEmailService;
 import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import com.wcs.mtgbox.transaction.offer.infrastructure.OfferRepository;
-import com.wcs.mtgbox.transaction.offer.infrastructure.exception.DeleteOfferNotAuthorizedErrorException;
-import com.wcs.mtgbox.transaction.offer.infrastructure.exception.OfferNotFoundErrorException;
-import com.wcs.mtgbox.transaction.offer.infrastructure.exception.UpdateOfferNotAuthorizedErrorException;
-import com.wcs.mtgbox.transaction.offer.infrastructure.exception.ValidateOfferErrorException;
+import com.wcs.mtgbox.transaction.offer.infrastructure.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -54,10 +51,20 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public OfferCreationDto saveOffer(OfferCreationDto offerCreationDto) {
+    public OfferCreationDto saveOffer(OfferCreationDto offerCreationDto, HttpServletRequest request) {
+        Long tokenUserId = this.jwtTokenService.getUserIdFromToken(request);
         UserCard wantedUserCard = userCardRepository.findById(offerCreationDto.getWantedUserCardId()).orElseThrow(UserCardNotFoundErrorException::new);
-        List<UserCard> userCards = userCardRepository.findAllById(offerCreationDto.getUserCardIds());
+        if (wantedUserCard.getUser().getId().equals(tokenUserId)) {
+            throw new CreateOfferNotAuthorizedErrorException();
+        }
+        List<UserCard> userCards = userCardRepository.findAllById(offerCreationDto.getUserCardIds())
+                .stream()
+                .filter(userCard -> userCard.getUser().getId().equals(tokenUserId))
+                .toList();
         User user = userRepository.findById(offerCreationDto.getUserId()).orElseThrow(UserNotFoundErrorException::new);
+        if (!user.getId().equals(tokenUserId)) {
+            throw new CreateOfferNotAuthorizedErrorException();
+        }
         Offer offer = offerRepository.save(offerMapper.offerCreationDtoToOfferEntity(user, userCards, wantedUserCard));
         return offerMapper.offerEntityToOfferCreationDto(offer);
     }

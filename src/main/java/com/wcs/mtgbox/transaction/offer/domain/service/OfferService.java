@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public interface OfferService {
-    OfferCreationDto saveOffer(OfferCreationDto offer);
+    OfferCreationDto saveOffer(OfferCreationDto offer, HttpServletRequest request);
     OfferDto getOfferById(Long offerId);
     List<OfferDto> getOffersByUserCardId(Long userCardId);
     List<OfferFullWantedCardDto> getOffersMadeByUserId(Long userId);
