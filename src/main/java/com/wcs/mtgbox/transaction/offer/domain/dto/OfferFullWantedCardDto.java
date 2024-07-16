@@ -21,6 +21,6 @@ public class OfferFullWantedCardDto {
     private int department;
     private String status;
     private LocalDateTime createdDate;
-    private LocalDateTime acceptedDate;
+    private LocalDateTime lastModificationDate;
     private List<CollectionCardDto> userCards;
 }

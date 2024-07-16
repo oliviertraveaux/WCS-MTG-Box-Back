@@ -39,8 +39,8 @@ public class Offer {
     private LocalDateTime createdDate;
 
     @LastModifiedDate
-    @Column(name = "accepted_date")
-    private LocalDateTime acceptedDate;
+    @Column(name = "last_modification_date")
+    private LocalDateTime lastModificationDate;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinTable(

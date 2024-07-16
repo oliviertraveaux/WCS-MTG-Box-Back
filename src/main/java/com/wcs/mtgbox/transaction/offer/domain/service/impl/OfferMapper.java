@@ -29,6 +29,7 @@ public class OfferMapper {
         offer.setUserCards(userCards);
         offer.setStatus("PENDING");
         offer.setCreatedDate(LocalDateTime.now());
+        offer.setLastModificationDate(LocalDateTime.now());
         return offer;
     }
 
@@ -50,7 +51,7 @@ public class OfferMapper {
         offerDto.setDepartment(offer.getUser().getDepartment());
         offerDto.setStatus(offer.getStatus());
         offerDto.setCreatedDate(offer.getCreatedDate());
-        offerDto.setAcceptedDate(offer.getAcceptedDate());
+        offerDto.setLastModificationDate(offer.getLastModificationDate());
 
         List<CollectionCardDto> collectionCards = new ArrayList<>();
         offer.getUserCards().forEach(userCard -> {
@@ -73,7 +74,7 @@ public class OfferMapper {
         offerReceivedDto.setDepartment(offer.getUser().getDepartment());
         offerReceivedDto.setStatus(offer.getStatus());
         offerReceivedDto.setCreatedDate(offer.getCreatedDate());
-        offerReceivedDto.setAcceptedDate(offer.getAcceptedDate());
+        offerReceivedDto.setLastModificationDate(offer.getLastModificationDate());
 
         List<CollectionCardDto> collectionCards = new ArrayList<>();
         offer.getUserCards().forEach(userCard -> {

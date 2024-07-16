@@ -89,7 +89,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<OfferFullWantedCardDto> getOffersMadeByUserId(Long userId) {
-        List<Offer> offers = offerRepository.findAllByUser_Id(userId);
+        List<Offer> offers = offerRepository.findAllByUser_IdOrderByLastModificationDateDesc(userId);
         return offers.stream()
                 .filter(offer -> !offer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
                 .map(offerMapper::offerEntityToOfferReceivedDto).toList();
@@ -99,7 +99,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public List<OfferFullWantedCardDto> getOffersReceivedByUserId(Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundErrorException::new);
-            List<Offer> offers = offerRepository.findAllByWantedUserCard_User_Id(userId);
+            List<Offer> offers = offerRepository.findAllByWantedUserCard_User_IdOrderByCreatedDateDesc(userId);
             return offers.stream()
                     .filter(offer -> !offer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
                     .map(offerMapper::offerEntityToOfferReceivedDto).toList();
@@ -108,7 +108,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public List<OfferFullWantedCardDto> getOffersHistoryByUserId(Long userId) {
         userRepository.findById(userId).orElseThrow(UserNotFoundErrorException::new);
-        List<Offer> offers = offerRepository.findAllByUser_IdOrWantedUserCard_User_Id(userId, userId);
+        List<Offer> offers = offerRepository.findAllByUser_IdOrWantedUserCard_User_IdOrderByLastModificationDateDesc(userId, userId);
         return offers.stream()
                 .filter(offer -> offer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
                 .map(offerMapper::offerEntityToOfferReceivedDto).toList();
@@ -131,7 +131,7 @@ public class OfferServiceImpl implements OfferService {
             throw new UpdateOfferNotAuthorizedErrorException();
         }
         offer.setStatus(offerStatus);
-        offer.setAcceptedDate(LocalDateTime.now());
+        offer.setLastModificationDate(LocalDateTime.now());
 
         return offerMapper.offerEntityToOfferDto(offerRepository.save(offer));
     }
@@ -145,7 +145,7 @@ public class OfferServiceImpl implements OfferService {
                 throw new UpdateOfferNotAuthorizedErrorException();
             }
             offer.setStatus(offerStatus);
-            offer.setAcceptedDate(LocalDateTime.now());
+            offer.setLastModificationDate(LocalDateTime.now());
             offerRepository.save(offer);
 
             List<Offer> currentOffers = offerRepository.findAllByWantedUserCard_Id(offer.getWantedUserCard().getId())
@@ -181,7 +181,7 @@ public class OfferServiceImpl implements OfferService {
             throw new UpdateOfferNotAuthorizedErrorException();
         }
         offer.setStatus(offerStatus);
-        offer.setAcceptedDate(LocalDateTime.now());
+        offer.setLastModificationDate(LocalDateTime.now());
         return offerMapper.offerEntityToOfferDto(offerRepository.save(offer));
     }
 
