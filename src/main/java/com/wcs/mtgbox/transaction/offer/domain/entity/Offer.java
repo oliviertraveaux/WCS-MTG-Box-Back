@@ -49,4 +49,5 @@ public class Offer {
             inverseJoinColumns = @JoinColumn(name = "user_card_id")
     )
     private List<UserCard> userCards;
+
 }
