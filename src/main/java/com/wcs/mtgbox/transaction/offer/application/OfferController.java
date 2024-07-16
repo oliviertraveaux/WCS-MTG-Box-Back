@@ -24,8 +24,8 @@ public class OfferController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCollectionCards(@RequestBody OfferCreationDto offerBody) {
-        return ResponseEntity.status(201).body(offerService.saveOffer(offerBody));
+    public ResponseEntity<?> addCollectionCards(@RequestBody OfferCreationDto offerBody, HttpServletRequest request) {
+        return ResponseEntity.status(201).body(offerService.saveOffer(offerBody, request));
     }
 
     @GetMapping("/{id}")

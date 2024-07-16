@@ -7,10 +7,10 @@ import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import java.util.List;
 
 public interface CollectionCardService {
-    List<CollectionCardDto> saveCollectionCards(List<AddCollectionCardDto> addCardList);
+    List<CollectionCardDto> saveCollectionCards(List<AddCollectionCardDto> addCardList, Long tokenUserId);
     List<CollectionCardDto> getCollectionCardsByUserId(Long userId);
 
-    void removeUserCardId(Long userCardId);
+    void removeUserCardId(Long userCardId, Long tokenUserId );
 
-    void removeUserCardsByUserCardIds(List<Long> userCardId);
+    void removeUserCardsByUserCardIds(List<Long> userCardId, Long tokenUserId);
 }
