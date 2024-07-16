@@ -8,11 +8,15 @@ import com.wcs.mtgbox.collection.infrastructure.exception.UserCardOnMarketErrorE
 import com.wcs.mtgbox.collection.infrastructure.repository.CardRepository;
 import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +42,21 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
         List<Card> cards = this.getCards(allParams);
         return this.fromCardsToUserCardOnMarketSearchResults(cards, allParams);
     }
+
+
+
+    @Override
+    public List<UserCardOnMarketSearchResultDto> getLastMarketCards(int limit) {
+        List<Card> lastMarketCards = this.getLastCards(limit);
+        return this.fromCardsToUserCardOnMarketSearchResults(lastMarketCards, new HashMap<>());
+    }
+
+    private List<Card> getLastCards(int limit) {
+        Pageable pageable = PageRequest.of(0, limit, Sort.by("id").descending());
+        return cardRepository.findAll(pageable).getContent();
+    }
+
+
 
     // return searchResult if userCard list is not empty and valid
     private List<UserCardOnMarketSearchResultDto> fromCardsToUserCardOnMarketSearchResults(List<Card> cards, Map<String, String> allParams) {
@@ -120,4 +139,5 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
         }
         return  cardRepository.findAll(spec);
     }
+
 }

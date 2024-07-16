@@ -28,4 +28,10 @@ public class UserCardOnMarketController {
         }
         return userCardOnMarketService.getMarketCards(allParams);
     }
+
+    @GetMapping("/latest")
+    @Operation(summary = "Get last market cards", description = "Retrieves the last cards added to the market")
+    public List<UserCardOnMarketSearchResultDto> getLastMarketCards(@RequestParam int limit) {
+        return userCardOnMarketService.getLastMarketCards(limit);
+    }
 }

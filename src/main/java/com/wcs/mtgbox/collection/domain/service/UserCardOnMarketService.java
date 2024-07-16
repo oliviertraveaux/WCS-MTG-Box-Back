@@ -8,4 +8,6 @@ import java.util.Map;
 public interface UserCardOnMarketService {
 
     List<UserCardOnMarketSearchResultDto> getMarketCards(Map<String,String> allParams);
+
+    List<UserCardOnMarketSearchResultDto> getLastMarketCards(int limit);
 }
