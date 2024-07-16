@@ -13,7 +13,7 @@ MTGBOX is an application dedicated to trading products related to Magic: The Gat
 
 Before you begin, ensure you have the following installed on your machine:
 
-**Java 17** 
+**Java 21** 
 
 **Maven 3.6+** 
 
