@@ -1,7 +1,5 @@
 package com.wcs.mtgbox.collection.domain.dto;
 
-import com.wcs.mtgbox.collection.domain.entity.Card;
-import com.wcs.mtgbox.collection.domain.model.CardBasicInfo;
 import com.wcs.mtgbox.collection.domain.model.CardBasicInfoWithId;
 import com.wcs.mtgbox.collection.domain.model.CardUserInfo;
 import lombok.AllArgsConstructor;
