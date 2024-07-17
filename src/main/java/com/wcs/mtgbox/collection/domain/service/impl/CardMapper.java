@@ -48,28 +48,29 @@ public class CardMapper {
     }
 
     public CollectionCardDto userCardEntityToCollectionCardDto(UserCard userCard) {
-        CollectionCardDto cardDto = new CollectionCardDto(new CardBasicInfoWithId(), new CardUserInfo());
+        CollectionCardDto collectionCardDto = new CollectionCardDto(new CardBasicInfoWithId(), new CardUserInfo());
         Card cardInfo = userCard.getCard();
 
-        cardDto.getCardInfo().setUniqueId(cardInfo.getId());
-        cardDto.getCardInfo().setApiCardId(cardInfo.getApiCardId());
-        cardDto.getCardInfo().setName(cardInfo.getName());
-        cardDto.getCardInfo().setImageUrl(cardInfo.getImageUrl());
-        cardDto.getCardInfo().setFrenchName(cardInfo.getFrenchName());
-        cardDto.getCardInfo().setFrenchImageUrl(cardInfo.getFrenchImageUrl());
-        cardDto.getCardInfo().setManaCost(cardInfo.getManaCost());
-        cardDto.getCardInfo().setRarity(cardInfo.getRarity());
-        cardDto.getCardInfo().setSetAbbreviation(cardInfo.getSetAbbreviation());
-        cardDto.getCardInfo().setSetName(cardInfo.getSetName());
-        cardDto.getCardInfo().setText(cardInfo.getText());
-        cardDto.getCardInfo().setArtist(cardInfo.getArtist());
+        collectionCardDto.getCardInfo().setUniqueId(cardInfo.getId());
+        collectionCardDto.getCardInfo().setApiCardId(cardInfo.getApiCardId());
+        collectionCardDto.getCardInfo().setName(cardInfo.getName());
+        collectionCardDto.getCardInfo().setImageUrl(cardInfo.getImageUrl());
+        collectionCardDto.getCardInfo().setFrenchName(cardInfo.getFrenchName());
+        collectionCardDto.getCardInfo().setFrenchImageUrl(cardInfo.getFrenchImageUrl());
+        collectionCardDto.getCardInfo().setManaCost(cardInfo.getManaCost());
+        collectionCardDto.getCardInfo().setRarity(cardInfo.getRarity());
+        collectionCardDto.getCardInfo().setSetAbbreviation(cardInfo.getSetAbbreviation());
+        collectionCardDto.getCardInfo().setSetName(cardInfo.getSetName());
+        collectionCardDto.getCardInfo().setText(cardInfo.getText());
+        collectionCardDto.getCardInfo().setArtist(cardInfo.getArtist());
+        collectionCardDto.getCardInfo().setHasAnOffer(!userCard.getOffersByWantedCard().isEmpty());
 
-        cardDto.getUserInfo().setUserCardId(userCard.getId());
-        cardDto.getUserInfo().setUserId(userCard.getUser().getId());
-        cardDto.getUserInfo().setQualityName(userCard.getCardQuality().getName());
-        cardDto.getUserInfo().setLanguageName(userCard.getCardLanguage().getName());
+        collectionCardDto.getUserInfo().setUserCardId(userCard.getId());
+        collectionCardDto.getUserInfo().setUserId(userCard.getUser().getId());
+        collectionCardDto.getUserInfo().setQualityName(userCard.getCardQuality().getName());
+        collectionCardDto.getUserInfo().setLanguageName(userCard.getCardLanguage().getName());
 
-        return cardDto;
+        return collectionCardDto;
     }
 
     public UserCardOnMarketSearchResultDto userCardToUserCardOnMarketSearchResultDto(Card card, List<UserCard> userCards) {
@@ -104,8 +105,7 @@ public class CardMapper {
         userCardOnMarketDto.setQuality(userCard.getCardQuality().getName());
         userCardOnMarketDto.setLanguage(userCard.getCardLanguage().getName());
         userCardOnMarketDto.setDepartment(userCard.getUser().getDepartment());
-        // TODO (set to false by default for now)
-        userCardOnMarketDto.setHasAnOffer(false);
+        userCardOnMarketDto.setHasAnOffer(!userCard.getOffersByWantedCard().isEmpty());
 
         return userCardOnMarketDto;
     }

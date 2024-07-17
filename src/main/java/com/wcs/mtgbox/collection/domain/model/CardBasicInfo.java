@@ -18,4 +18,5 @@ public class CardBasicInfo {
     private String setName;
     private String artist;
     private String text;
+    private boolean hasAnOffer;
 }
