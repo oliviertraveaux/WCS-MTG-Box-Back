@@ -63,12 +63,12 @@ public class CardMapper {
         collectionCardDto.getCardInfo().setSetName(cardInfo.getSetName());
         collectionCardDto.getCardInfo().setText(cardInfo.getText());
         collectionCardDto.getCardInfo().setArtist(cardInfo.getArtist());
-        collectionCardDto.getCardInfo().setHasAnOffer(!userCard.getOffersByWantedCard().isEmpty());
 
         collectionCardDto.getUserInfo().setUserCardId(userCard.getId());
         collectionCardDto.getUserInfo().setUserId(userCard.getUser().getId());
         collectionCardDto.getUserInfo().setQualityName(userCard.getCardQuality().getName());
         collectionCardDto.getUserInfo().setLanguageName(userCard.getCardLanguage().getName());
+        collectionCardDto.getUserInfo().setHasAnOffer(userCard.getOffersByWantedCard() != null && !userCard.getOffersByWantedCard().isEmpty());
 
         return collectionCardDto;
     }

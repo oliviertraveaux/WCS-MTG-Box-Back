@@ -12,4 +12,5 @@ public class CardUserInfo {
     private Long userId;
     private String qualityName;
     private String languageName;
+    private boolean hasAnOffer;
 }
