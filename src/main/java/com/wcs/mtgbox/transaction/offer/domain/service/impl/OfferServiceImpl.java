@@ -148,17 +148,24 @@ public class OfferServiceImpl implements OfferService {
             offer.setLastModificationDate(LocalDateTime.now());
             offerRepository.save(offer);
 
-            List<Offer> currentOffers = offerRepository.findAllByWantedUserCard_Id(offer.getWantedUserCard().getId())
+            List<Offer> offersWithSameWantedCard = offerRepository.findAllByWantedUserCard_Id(offer.getWantedUserCard().getId())
                     .stream()
                     .filter(currentOffer -> !currentOffer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
                     .toList();
 
-            offerRepository.deleteAll(currentOffers);
+            offerRepository.deleteAll(offersWithSameWantedCard);
 
             for (UserCard userCard : offer.getUserCards()) {
               UserCard userCardToChange = userCardRepository.findById(userCard.getId()).orElseThrow(UserCardNotFoundErrorException::new);
               userCardToChange.setIsActive(false);
-                userCardRepository.save(userCardToChange);
+              userCardRepository.save(userCardToChange);
+              List<Offer> offersWithSameUserCard = offerRepository.findOffersByUserCardId(userCard.getId())
+                      .stream()
+                      .filter(offerResult -> !offerResult.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
+                      .toList();
+              if (!offersWithSameUserCard.isEmpty()) {
+                  offerRepository.deleteAll(offersWithSameUserCard);
+              }
             }
 
             UserCard wantedUserCardToChange = userCardRepository.findById(offer.getWantedUserCard().getId()).orElseThrow(UserCardNotFoundErrorException::new);
@@ -212,4 +219,5 @@ public class OfferServiceImpl implements OfferService {
         }
         return false;
     }
+
 }
