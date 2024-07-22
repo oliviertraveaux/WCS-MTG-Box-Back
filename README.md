@@ -84,7 +84,7 @@ Start the Spring Boot application.
 To run tests, run the following command
 
 ```bash
-  npm run test
+  mvn test
 ```
 
 
