@@ -3,7 +3,7 @@ name: Build and deploy
 on:
   workflow_dispatch:
     branches:
-      - dev
+      - main
 
 jobs:
   build-deploy:
