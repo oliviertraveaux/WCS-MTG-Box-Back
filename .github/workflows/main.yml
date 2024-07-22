@@ -54,7 +54,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd mtgbox/WCS-MTG-Box-Back
+            cd /mtgbox/WCS-MTG-Box-Back
             git pull 
             cd docker           
             docker compose up -d
