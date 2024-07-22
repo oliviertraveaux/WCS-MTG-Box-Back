@@ -1,6 +1,13 @@
 package com.wcs.mtgbox.auth.domain.entity;
 
+import com.wcs.mtgbox.collection.domain.entity.UserCard;
+import com.wcs.mtgbox.files.domain.entity.Media;
+import com.wcs.mtgbox.transaction.offer.domain.entity.Offer;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,10 +15,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@DynamicUpdate
 @Table(name = "`user`")
 @EntityListeners(AuditingEntityListener.class)
+@Getter @Setter
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,17 +44,15 @@ public class User {
     @Column(name = "is_banned", nullable = false)
     private Boolean isBanned = false;
 
-    @Column(name = "post_code", nullable = false)
-    private int postCode;
+    @Column(name = "department", nullable = false)
+    private int department;
 
     @Column(name = "city", nullable = false)
     private String city;
 
-    @LastModifiedDate
     @Column(name = "last_connection_date", nullable = false)
     private LocalDateTime lastConnectionDate;
 
-//    @Column(name = "creation_date", nullable = false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreatedDate
     @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
@@ -53,91 +62,29 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<UserCard> userCards;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "file_id")
+    private Media media;
 
-    public String getUsername() {
-        return username;
-    }
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PasswordToken> passwordTokens;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @Getter
+    @Setter
+    @Transient
+    private String plainPassword;
 
-    public String getEmail() {
-        return email;
-    }
+    @Setter
+    @Getter
+    @Transient
+    private String plainPasswordVerification;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Offer> offers;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String hashedPassword) {
-        this.password = hashedPassword;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public Boolean getBanned() {
-        return isBanned;
-    }
-
-    public void setBanned(Boolean banned) {
-        isBanned = banned;
-    }
-
-    public int getPostCode() {
-        return postCode;
-    }
-
-    public void setPostCode(int postCode) {
-        this.postCode = postCode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public LocalDateTime getLastConnectionDate() {
-        return lastConnectionDate;
-    }
-
-    public void setLastConnectionDate(LocalDateTime lastConnectionDate) {
-        this.lastConnectionDate = lastConnectionDate;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

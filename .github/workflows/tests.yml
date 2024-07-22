@@ -1,0 +1,33 @@
+name: Build and test
+
+on:
+  push:
+    branches-ignore:
+      - 'dev'
+      - 'main'
+jobs:
+  build-deploy:
+    name: build and test
+    runs-on: ubuntu-latest
+    env:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+      SPRING_DATASOURCE_USERNAME: 'sa'
+      SPRING_DATASOURCE_PASSWORD: 'password'
+      TEST_USER_USERNAME: 'john'
+      TEST_USER_PASSWORD: 'johndoe'
+      JWT_SECRETKEY: 'Juw34WOQg0Rn397En9Ek+LSH4fDEl4QSBGeN1izonY6xA2/sJLVQs2I5vT5ydJxclQUaiLNc2xqlpcodiEnQ5nGiKCXtBbmO6jkpsxBV/h9HgpzmtkSiahnqolPzE0pPEsEQBa2Sow4pLM1yRahGhKoHUBHEykKL8ADJPyJ4n578th4s5vYAaErhBnJ9rVua42RiQLa8avCo6yiKskfAdKegJvdUv/jkZNrXzeIwvjmVQvoUWvtYDgsKP/8RSBkQ5c0snaDQ/Bl7XaPsp/rk1Cy6FW6pb4p6RMyBwVsFxtMEGkM0rxjpUkinIwRxidkk5aeMU8xjx+IH9D5CIAPZzM9GgzbI7WNHMKQKp8iUkC4='
+      TOKEN_VALIDITY_TIME_IN_MINUTE: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+
+      - name: Unit tests
+        run: mvn -B test --file pom.xml
+
+      - name: Build the application
+        run: mvn -B package --file pom.xml

@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.auth.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wcs.mtgbox.auth.domain.dto.RoleEnum;
 import com.wcs.mtgbox.auth.domain.dto.UserDTO;
 import com.wcs.mtgbox.auth.domain.dto.UserRegistrationDTO;
 import com.wcs.mtgbox.auth.domain.entity.Role;
@@ -57,7 +58,7 @@ AuthControllerTest {
                 .andReturn()
         ;
 
-        assertNotNull(result.getResponse().getContentType());
+        assertNotNull(result.getResponse().getCookies());
     }
 
     @Test
@@ -80,7 +81,7 @@ AuthControllerTest {
     public void TestRegisterShouldSuccess() throws Exception {
         UserRegistrationDTO user = new UserRegistrationDTO("Jack", "jack@gmail.com", "password123", 75000, "Paris");
         UserDTO userResponse = new UserDTO(10L, "jack", "jack@gmail.com", true, false, 33000, "Bordeaux", LocalDateTime.now(),
-                LocalDateTime.now(), new Role(1L, "USER"));
+                LocalDateTime.now(), new Role(1L, RoleEnum.USER));
         ObjectMapper mapper = new ObjectMapper();
 
 
@@ -102,7 +103,7 @@ AuthControllerTest {
        JSONObject jsonUser = new JSONObject();
        jsonUser.put("email", "bob@doe.com");
        jsonUser.put("username", "bob");
-       jsonUser.put("postCode", 31000);
+       jsonUser.put("Department", 31);
        jsonUser.put("city", "Toulouse");
        jsonUser.put("password", "azerty");
 
@@ -113,7 +114,7 @@ AuthControllerTest {
                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("bob@doe.com"))
                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("bob"))
-               .andExpect(MockMvcResultMatchers.jsonPath("$.postCode").value(31000))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.department").value(31))
                .andExpect(MockMvcResultMatchers.jsonPath("$.city").value("Toulouse"))
                ;
 
@@ -151,7 +152,7 @@ AuthControllerTest {
                 .andReturn()
                 ;
 System.out.println("token : " + result.getResponse().getContentAsString());
-        assertNotNull(result.getResponse().getContentType());
+        assertNotNull(result.getResponse().getCookies());
     }
 }
 

@@ -1,6 +1,7 @@
 package com.wcs.mtgbox.auth.application;
 
 
+import jakarta.servlet.http.Cookie;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
 
-    public String loginHelper(String username, String password) throws Exception {
+    public Cookie loginHelper(String username, String password) throws Exception {
         JSONObject jo = new JSONObject();
         jo.put("username", username);
         jo.put("password", password);
@@ -41,16 +42,17 @@ public class UserControllerTest {
         );
 
         MvcResult result = resultActions.andReturn();
-        return result.getResponse().getContentAsString();
+        return result.getResponse().getCookie("token");
     }
 
     @Test
     public void TestReadUserShouldBeStatusOK() throws Exception {
+        Cookie cookie = loginHelper(USER_USERNAME, USER_PASSWORD);
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
                                 .get("/api/v1/users/1")
-                                .header("Authorization", "Bearer " + loginHelper(USER_USERNAME, USER_PASSWORD))
+                                .cookie(cookie)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
         ;
@@ -58,11 +60,12 @@ public class UserControllerTest {
 
     @Test
     public void TestReadUserShouldBeStatusNotFound() throws Exception {
+        Cookie cookie = loginHelper(USER_USERNAME, USER_PASSWORD);
         mockMvc
                 .perform(
                         MockMvcRequestBuilders
                                 .get("/api/v1/users/0")
-                                .header("Authorization", "Bearer " + loginHelper(USER_USERNAME, USER_PASSWORD))
+                                .cookie(cookie)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
         ;

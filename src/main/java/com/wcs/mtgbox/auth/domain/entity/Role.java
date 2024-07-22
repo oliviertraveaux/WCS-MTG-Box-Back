@@ -1,9 +1,15 @@
 package com.wcs.mtgbox.auth.domain.entity;
 
+import com.wcs.mtgbox.auth.domain.dto.RoleEnum;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table
+@Getter @Setter
+@AllArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,37 +17,10 @@ public class Role {
     private Long id;
 
     @Column(name = "type", nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum type;
 
     public Role() {
     }
 
-    public Role(String type) {
-        this.type = type; // ADMIN, USER, ...
-    }
-
-    public Role(Long id ) {
-        this.id = id; // ADMIN, USER, ...
-    }
-
-    public Role(Long id, String type ) {
-        this.id = id;
-        this.type = type;// ADMIN, USER, ...
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String role) {
-        this.type = role;
-    }
 }

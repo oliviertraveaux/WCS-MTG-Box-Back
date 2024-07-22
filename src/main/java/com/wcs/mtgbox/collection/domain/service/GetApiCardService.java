@@ -1,37 +1,21 @@
 package com.wcs.mtgbox.collection.domain.service;
 
-import io.magicthegathering.javasdk.api.CardAPI;
 import io.magicthegathering.javasdk.resource.Card;
-import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-@Service
-public class GetApiCardService {
-    public Card getCardFromApi(int multiverseId) {
-        return CardAPI.getCard(multiverseId);
-    }
+public interface GetApiCardService {
 
-    public Card getCardFromApi(String cardId) {
-        return CardAPI.getCard(cardId);
-    }
+    Card getCardFromApi(int multiverseId);
 
-    public List<Card> getCardsFromApi(Map<String,String> filtersList) {
-        String filters = String.valueOf(filtersList);
-        filters = filters.substring(1, filters.length() - 1);
-        List<String> myList = new ArrayList<String>(Arrays.asList(filters.split(", ")));
-        return CardAPI.getAllCards(myList);
-    }
+    Card getCardFromApi(String cardId);
 
-    public List<String> getCardsTypeFromApi() {
-        return CardAPI.getAllCardTypes();
-    }
+    List<Card> getCardsFromApi(Map<String,String> filtersList);
 
-    public List<String> getCardsSuperTypeFromApi() {
-        return CardAPI.getAllCardSupertypes();
-    }
+    List<String> getCardsTypeFromApi();
 
-    public List<String> getCardsSubTypeFromApi() {
-        return CardAPI.getAllCardSubtypes();
-    }
+    List<String> getCardsSuperTypeFromApi();
+
+    List<String> getCardsSubTypeFromApi();
 }

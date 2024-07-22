@@ -34,3 +34,8 @@ build/
 
 ### properties ###
 application.properties
+
+### upload files ###
+upload-dir/
+
+
