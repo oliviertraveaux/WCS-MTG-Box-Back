@@ -26,7 +26,7 @@ public class UserCardOnMarketServiceImpl implements UserCardOnMarketService {
     private final UserCardRepository userCardRepository;
     private final CardMapper cardMapper;
 
-    @Value("${lastConnexionDelay}")
+    @Value("${lastConnexionDelay:15}")
     private int LAST_CONNEXION_DELAY;
 
 
