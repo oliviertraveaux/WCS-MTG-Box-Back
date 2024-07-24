@@ -101,10 +101,9 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     public ResponseCookie createJwtCookie(String tokenValue) {
         return ResponseCookie.from("token", tokenValue)
                 .httpOnly(true)
-                //.secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
+//                .secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
                 .path("/")
                 .maxAge(JWT_TOKEN_VALIDITY_IN_MINUTE * 60)
-                .sameSite("Strict")
                 .build();
     }
 
