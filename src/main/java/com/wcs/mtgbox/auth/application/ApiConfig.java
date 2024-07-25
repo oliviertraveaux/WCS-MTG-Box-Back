@@ -11,7 +11,7 @@ public class ApiConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Tous les chemins
-                .allowedOrigins("http://localhost:4200", "https://vps-2aaddff6.vps.ovh.net") // URL(s) autorisée(s)
+                .allowedOrigins("http://localhost:4200", "https://main--mtgbox.netlify.app", "https://dev--mtgbox.netlify.app", "https://mtgbox.netlify.app" ) // URL(s) autorisée(s)
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Méthodes HTTP autorisées
                 .allowCredentials(true)
                 .maxAge(3600);
