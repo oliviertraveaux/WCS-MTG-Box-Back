@@ -104,6 +104,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
                 .path("/")
                 .sameSite("None")
+                .domain("vps-2aaddff6.vps.ovh.net")
                 .maxAge(JWT_TOKEN_VALIDITY_IN_MINUTE * 60)
                 .build();
     }
