@@ -46,11 +46,11 @@ public class FilterController {
 
     // UNCOMMENT FOR DEVELOPMENT PURPOSE ONLY. REMOVE FOR PRODUCTION
 
-    @PostMapping("/sets")
-    public ResponseEntity<List<CardSet>> saveAllApiCardSets() {
-        List<CardSet> apiSets = filterService.saveAllApiCardSets();
-        return ResponseEntity.ok().body(apiSets);
-    }
+//    @PostMapping("/sets")
+//    public ResponseEntity<List<CardSet>> saveAllApiCardSets() {
+//        List<CardSet> apiSets = filterService.saveAllApiCardSets();
+//        return ResponseEntity.ok().body(apiSets);
+//    }
 
     @GetMapping("/types")
     @Operation(summary = "Get all card types", description = "Retrieves all the available card types for cards and collections")
@@ -62,11 +62,11 @@ public class FilterController {
 
     // UNCOMMENT FOR DEVELOPMENT PURPOSE ONLY. REMOVE FOR PRODUCTION
 
-    @PostMapping("/types")
-    public ResponseEntity<List<CardType>> saveAllCardTypes() {
-        List<CardType> cardTypes = filterService.saveAllCardTypes();
-        return ResponseEntity.ok().body(cardTypes);
-    }
+//    @PostMapping("/types")
+//    public ResponseEntity<List<CardType>> saveAllCardTypes() {
+//        List<CardType> cardTypes = filterService.saveAllCardTypes();
+//        return ResponseEntity.ok().body(cardTypes);
+//    }
 
     @GetMapping("/languages")
     @Operation(summary = "Get all languages", description = "Retrieves all the available languages for cards and collections")
