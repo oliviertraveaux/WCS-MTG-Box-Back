@@ -103,7 +103,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .httpOnly(true)
                 .secure(true)    // Décommenter pour marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
                 .path("/")
-                .sameSite("Strict")
+                .sameSite("None")
                 .maxAge(JWT_TOKEN_VALIDITY_IN_MINUTE * 60)
                 .build();
     }
