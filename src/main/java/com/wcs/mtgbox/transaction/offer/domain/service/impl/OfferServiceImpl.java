@@ -65,6 +65,11 @@ public class OfferServiceImpl implements OfferService {
         if (!user.getId().equals(tokenUserId)) {
             throw new CreateOfferNotAuthorizedErrorException();
         }
+
+        if (user.getIsBanned()) {
+            throw new CreateOfferBannedUserErrorException();
+        }
+
         Offer offer = offerRepository.save(offerMapper.offerCreationDtoToOfferEntity(user, userCards, wantedUserCard));
         return offerMapper.offerEntityToOfferCreationDto(offer);
     }
@@ -122,6 +127,15 @@ public class OfferServiceImpl implements OfferService {
             throw new DeleteOfferNotAuthorizedErrorException();
         }
         offerRepository.delete(offer);
+    }
+
+    @Override
+    public void deleteAllByUserId(Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundErrorException::new);
+        List<Offer> offers = offerRepository.findAllByUser_IdOrWantedUserCard_User_IdOrderByLastModificationDateDesc(userId, userId).stream()
+                .filter(currentOffer -> !currentOffer.getStatus().equals(OfferStatusEnum.VALIDATED.getFullName()))
+                .toList();
+        offerRepository.deleteAll(offers);
     }
 
     @Override
@@ -219,5 +233,4 @@ public class OfferServiceImpl implements OfferService {
         }
         return false;
     }
-
 }
