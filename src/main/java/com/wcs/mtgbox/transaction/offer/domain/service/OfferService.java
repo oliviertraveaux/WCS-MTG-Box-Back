@@ -17,6 +17,7 @@ public interface OfferService {
     List<OfferFullWantedCardDto> getOffersReceivedByUserId(Long userId);
     List<OfferFullWantedCardDto> getOffersHistoryByUserId(Long userId);
     void deleteOffer(Long offerId, HttpServletRequest request);
+    void deleteAllByUserId(Long userId);
     OfferDto acceptOffer(Long offerId, String offerStatus, HttpServletRequest request);
     OfferDto validateOffer(Long offerId, String offerStatus, HttpServletRequest request);
     OfferDto cancelOffer(Long offerId, String offerStatus, HttpServletRequest request);
