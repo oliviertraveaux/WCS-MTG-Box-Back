@@ -11,6 +11,7 @@ import com.wcs.mtgbox.auth.infrastructure.exception.user.UserNotFoundErrorExcept
 import com.wcs.mtgbox.auth.infrastructure.repository.UserRepository;
 import com.wcs.mtgbox.collection.domain.entity.UserCard;
 import com.wcs.mtgbox.collection.infrastructure.repository.UserCardRepository;
+import com.wcs.mtgbox.transaction.offer.domain.service.OfferService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -32,7 +33,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final JwtTokenService jwtTokenService;
     private final UserDetailsServiceImpl userDetailsService;
     private final UserCardRepository userCardRepository;
-
+    private final OfferService offerService;
 
     public UserInfoServiceImpl(
             UserRepository userRepository,
@@ -40,7 +41,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             BCryptPasswordEncoder passwordEncoder,
             JwtTokenService jwtTokenService,
             UserDetailsServiceImpl userDetailsService,
-            UserCardRepository userCardRepository
+            UserCardRepository userCardRepository, OfferService offerService
     ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -48,6 +49,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         this.jwtTokenService = jwtTokenService;
         this.userDetailsService = userDetailsService;
         this.userCardRepository = userCardRepository;
+        this.offerService = offerService;
     }
 
     @Override
@@ -214,6 +216,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (request.getIsBanned() != null && !request.getIsBanned().equals(user.getIsBanned())) {
             user.setIsBanned(request.getIsBanned());
             dataChanged = true;
+        }
+
+        if (user.getIsBanned()) {
+            this.offerService.deleteAllByUserId(id);
         }
 
         if (request.getRole() != null && !request.getRole().equals(user.getRole().getType())) {
